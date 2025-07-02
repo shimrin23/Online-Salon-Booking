@@ -1,5 +1,5 @@
 {
-  "name": "Salonbooker",
+  "name": "SalonBooker",
   "version": "2.0.0",
   "description": "Salon appointment website",
   "main": "server.js",
