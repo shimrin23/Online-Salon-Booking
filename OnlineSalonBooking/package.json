@@ -1,13 +1,13 @@
 {
-  "name": "healthbooker",
+  "name": "SalonBooker",
   "version": "2.0.0",
-  "description": "Doctor appointment website",
+  "description": "Saloon appointment website",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
-  "author": "Avinash905",
-  "license": "ISC",
+  "author": "Shimrin",
+ 
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
