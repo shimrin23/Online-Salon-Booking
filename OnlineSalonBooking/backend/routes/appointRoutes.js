@@ -5,17 +5,17 @@ const appointmentController = require("../controllers/appointmentController");
 const appointRouter = express.Router();
 
 appointRouter.get(
-  "/getallappointments",
+  "/getall",
   auth,
   appointmentController.getallappointments
 );
 
 appointRouter.post(
-  "/bookappointment",
+  "/book",
   auth,
   appointmentController.bookappointment
 );
 
-appointRouter.put("/completed", auth, appointmentController.completed);
+appointRouter.put("/complete", auth, appointmentController.completed);
 
 module.exports = appointRouter;

@@ -30,10 +30,10 @@ const Stylists = () => {
       <Navbar />
       {loading && <Loading />}
       {!loading && (
-        <section className="container doctors">
+        <section className="container stylists">
           <h2 className="page-heading">Our Stylists</h2>
           {stylists.length > 0 ? (
-            <div className="doctors-card-container">
+            <div className="stylists-card-container">
               {stylists.map((ele) => (
                 <StylistCard ele={ele} key={ele._id} />
               ))}

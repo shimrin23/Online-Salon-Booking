@@ -41,7 +41,7 @@ const Appointments = () => {
           "/appointment/completed",
           {
             appointid: ele?._id,
-            stylistId: ele?.doctorId?._id, // using doctorId as stylistId (backend should be updated accordingly)
+            stylistId: ele?.stylistId?._id,
             stylistName: `${ele?.userId?.firstname} ${ele?.userId?.lastname}`,
           },
           {
@@ -85,7 +85,7 @@ const Appointments = () => {
                     <th>Booking Date</th>
                     <th>Booking Time</th>
                     <th>Status</th>
-                    {userId === appointments[0]?.doctorId?._id && (
+                    {userId === appointments[0]?.stylistId?._id && (
                       <th>Action</th>
                     )}
                   </tr>
@@ -95,7 +95,7 @@ const Appointments = () => {
                     <tr key={ele?._id}>
                       <td>{i + 1}</td>
                       <td>
-                        {ele?.doctorId?.firstname + " " + ele?.doctorId?.lastname}
+                        {ele?.stylistId?.firstname + " " + ele?.stylistId?.lastname}
                       </td>
                       <td>
                         {ele?.userId?.firstname + " " + ele?.userId?.lastname}
@@ -105,7 +105,7 @@ const Appointments = () => {
                       <td>{ele?.createdAt?.split("T")[0]}</td>
                       <td>{ele?.updatedAt?.split("T")[1]?.split(".")[0]}</td>
                       <td>{ele?.status}</td>
-                      {userId === ele?.doctorId?._id && (
+                      {userId === ele?.stylistId?._id && (
                         <td>
                           <button
                             className={`btn user-btn accept-btn ${

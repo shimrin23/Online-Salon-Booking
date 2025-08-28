@@ -19,7 +19,11 @@ const schema = mongoose.Schema(
       type: Number,
       required: true,
     },
-    isDoctor: {
+    timing: {
+      type: String,
+      default: "morning",
+    },
+    isStylist: {
       type: Boolean,
       default: false,
     },
@@ -29,6 +33,6 @@ const schema = mongoose.Schema(
   }
 );
 
-const Doctor = mongoose.model("Doctor", schema);
+const Stylist = mongoose.model("Stylist", schema);
 
-module.exports = Doctor;
+module.exports = Stylist;

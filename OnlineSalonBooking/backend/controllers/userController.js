@@ -1,7 +1,7 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const Doctor = require("../models/doctorModel");
+const Stylist = require("../models/stylistModel");
 const Appointment = require("../models/appointmentModel");
 
 const getuser = async (req, res) => {
@@ -70,10 +70,18 @@ const register = async (req, res) => {
 
 const updateprofile = async (req, res) => {
   try {
-    const hashedPass = await bcrypt.hash(req.body.password, 10);
+    let updateData = { ...req.body };
+    
+    // Only hash password if it's provided
+    if (req.body.password) {
+      updateData.password = await bcrypt.hash(req.body.password, 10);
+    } else {
+      delete updateData.password; // Remove password field if not provided
+    }
+    
     const result = await User.findByIdAndUpdate(
       { _id: req.locals },
-      { ...req.body, password: hashedPass }
+      updateData
     );
     if (!result) {
       return res.status(500).send("Unable to update user");
@@ -87,7 +95,7 @@ const updateprofile = async (req, res) => {
 const deleteuser = async (req, res) => {
   try {
     const result = await User.findByIdAndDelete(req.body.userId);
-    const removeDoc = await Doctor.findOneAndDelete({
+    const removeStylist = await Stylist.findOneAndDelete({
       userId: req.body.userId,
     });
     const removeAppoint = await Appointment.findOneAndDelete({

@@ -1,50 +1,50 @@
-const Doctor = require("../models/doctorModel");
+const Stylist = require("../models/stylistModel");
 const User = require("../models/userModel");
 const Notification = require("../models/notificationModel");
 const Appointment = require("../models/appointmentModel");
 
-const getalldoctors = async (req, res) => {
+const getallstylists = async (req, res) => {
   try {
-    let docs;
+    let stylists;
     if (!req.locals) {
-      docs = await Doctor.find({ isDoctor: true }).populate("userId");
+      stylists = await Stylist.find({ isStylist: true }).populate("userId");
     } else {
-      docs = await Doctor.find({ isDoctor: true })
+      stylists = await Stylist.find({ isStylist: true })
         .find({
           _id: { $ne: req.locals },
         })
         .populate("userId");
     }
 
-    return res.send(docs);
+    return res.send(stylists);
   } catch (error) {
-    res.status(500).send("Unable to get doctors");
+    res.status(500).send("Unable to get stylists");
   }
 };
 
-const getnotdoctors = async (req, res) => {
+const getpendingstylists = async (req, res) => {
   try {
-    const docs = await Doctor.find({ isDoctor: false })
+    const stylists = await Stylist.find({ isStylist: false })
       .find({
         _id: { $ne: req.locals },
       })
       .populate("userId");
 
-    return res.send(docs);
+    return res.send(stylists);
   } catch (error) {
-    res.status(500).send("Unable to get non doctors");
+    res.status(500).send("Unable to get pending stylists");
   }
 };
 
-const applyfordoctor = async (req, res) => {
+const applyforstylist = async (req, res) => {
   try {
-    const alreadyFound = await Doctor.findOne({ userId: req.locals });
+    const alreadyFound = await Stylist.findOne({ userId: req.locals });
     if (alreadyFound) {
       return res.status(400).send("Application already exists");
     }
 
-    const doctor = Doctor({ ...req.body.formDetails, userId: req.locals });
-    const result = await doctor.save();
+    const stylist = Stylist({ ...req.body, userId: req.locals });
+    const result = await stylist.save();
 
     return res.status(201).send("Application submitted successfully");
   } catch (error) {
@@ -52,21 +52,21 @@ const applyfordoctor = async (req, res) => {
   }
 };
 
-const acceptdoctor = async (req, res) => {
+const acceptstylist = async (req, res) => {
   try {
     const user = await User.findOneAndUpdate(
       { _id: req.body.id },
-      { isDoctor: true, status: "accepted" }
+      { isStylist: true, status: "accepted" }
     );
 
-    const doctor = await Doctor.findOneAndUpdate(
+    const stylist = await Stylist.findOneAndUpdate(
       { userId: req.body.id },
-      { isDoctor: true }
+      { isStylist: true }
     );
 
     const notification = await Notification({
       userId: req.body.id,
-      content: `Congratulations, Your application has been accepted.`,
+      content: `Congratulations, Your stylist application has been accepted.`,
     });
 
     await notification.save();
@@ -77,17 +77,17 @@ const acceptdoctor = async (req, res) => {
   }
 };
 
-const rejectdoctor = async (req, res) => {
+const rejectstylist = async (req, res) => {
   try {
     const details = await User.findOneAndUpdate(
       { _id: req.body.id },
-      { isDoctor: false, status: "rejected" }
+      { isStylist: false, status: "rejected" }
     );
-    const delDoc = await Doctor.findOneAndDelete({ userId: req.body.id });
+    const delStylist = await Stylist.findOneAndDelete({ userId: req.body.id });
 
     const notification = await Notification({
       userId: req.body.id,
-      content: `Sorry, Your application has been rejected.`,
+      content: `Sorry, Your stylist application has been rejected.`,
     });
 
     await notification.save();
@@ -98,29 +98,29 @@ const rejectdoctor = async (req, res) => {
   }
 };
 
-const deletedoctor = async (req, res) => {
+const deletestylist = async (req, res) => {
   try {
     const result = await User.findByIdAndUpdate(req.body.userId, {
-      isDoctor: false,
+      isStylist: false,
     });
-    const removeDoc = await Doctor.findOneAndDelete({
+    const removeStylist = await Stylist.findOneAndDelete({
       userId: req.body.userId,
     });
     const removeAppoint = await Appointment.findOneAndDelete({
-      userId: req.body.userId,
+      stylistId: req.body.userId,
     });
-    return res.send("Doctor deleted successfully");
+    return res.send("Stylist deleted successfully");
   } catch (error) {
     console.log("error", error);
-    res.status(500).send("Unable to delete doctor");
+    res.status(500).send("Unable to delete stylist");
   }
 };
 
 module.exports = {
-  getalldoctors,
-  getnotdoctors,
-  deletedoctor,
-  applyfordoctor,
-  acceptdoctor,
-  rejectdoctor,
+  getallstylists,
+  getpendingstylists,
+  deletestylist,
+  applyforstylist,
+  acceptstylist,
+  rejectstylist,
 };

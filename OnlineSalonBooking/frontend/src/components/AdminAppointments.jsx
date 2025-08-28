@@ -19,6 +19,7 @@ const AdminAppointments = () => {
     try {
       dispatch(setLoading(true));
       const data = await fetchData(`/appointment/getall`);
+      setAppointments(data);
       dispatch(setLoading(false));
     } catch (error) {
       dispatch(setLoading(false));

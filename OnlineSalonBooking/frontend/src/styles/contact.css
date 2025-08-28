@@ -6,6 +6,10 @@
   margin: 0 auto;
 }
 
+.apply-stylist {
+  height: 90vh;
+}
+
 /* Responsive widths */
 @media (max-width: 1000px) {
   .contact-container {

@@ -56,7 +56,7 @@ const ApplyStylist = () => {
     <>
       <Navbar />
       <section
-        className="register-section flex-center apply-doctor"
+        className="register-section flex-center apply-stylist"
         id="contact"
       >
         <div className="register-container flex-center contact">
@@ -66,7 +66,7 @@ const ApplyStylist = () => {
               type="text"
               name="specialization"
               className="form-input"
-              placeholder="Enter your specialization (e.g., Haircut, Facial)"
+              placeholder="Enter your specialization (e.g., Haircut, Coloring, Styling)"
               value={formDetails.specialization}
               onChange={inputChange}
             />
@@ -82,7 +82,7 @@ const ApplyStylist = () => {
               type="number"
               name="rate"
               className="form-input"
-              placeholder="Enter your rate per service (in LKR)"
+              placeholder="Enter your rate per service (₹)"
               value={formDetails.rate}
               onChange={inputChange}
             />

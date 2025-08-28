@@ -77,8 +77,8 @@ function StylistApply() {
   };
 
   return (
-    <section className="apply-doctor-section flex-center">
-      <div className="apply-doctor-container flex-center">
+    <section className="apply-stylist-section flex-center">
+      <div className="apply-stylist-container flex-center">
         <h2 className="form-heading">Apply To Be A Stylist</h2>
         <form onSubmit={formSubmit} className="register-form">
           <input
