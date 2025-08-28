@@ -1,26 +1,33 @@
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config();
-require("./db/conn");
+require("dotenv").config();  // Loads .env variables
+require("./db/conn");        // Make sure this file connects to MongoDB
 const userRouter = require("./routes/userRoutes");
 const stylistRouter = require("./routes/stylistRoutes");
 const appointRouter = require("./routes/appointRoutes");
-const path = require("path");
 const notificationRouter = require("./routes/notificationRouter");
+const path = require("path");
 
 const app = express();
 const port = process.env.PORT || 5000;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
+
+// Routes
 app.use("/api/user", userRouter);
 app.use("/api/stylist", stylistRouter);
 app.use("/api/appointment", appointRouter);
 app.use("/api/notification", notificationRouter);
-app.use(express.static(path.join(__dirname, "./client/build")));
 
+// Serve frontend
+app.use(express.static(path.join(__dirname, "./client/build")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
-app.listen(port, () => {});
+// Start server
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
