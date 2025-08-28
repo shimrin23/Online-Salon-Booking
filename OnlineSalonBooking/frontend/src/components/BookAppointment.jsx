@@ -20,15 +20,29 @@ const BookAppointment = ({ setModalOpen, ele }) => {
 
   const bookAppointment = async (e) => {
     e.preventDefault();
+    
     try {
+      // Validation - Check if date and time are selected
+      if (!formDetails.date || !formDetails.time) {
+        return toast.error("Please select date and time");
+      }
+
+      // Check if date is in the future
+      const selectedDate = new Date(formDetails.date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Reset time to start of day for comparison
+      
+      if (selectedDate <= today) {
+        return toast.error("Please select a future date");
+      }
+
       await toast.promise(
-        axios.post(
-          "/appointment/bookappointment", // Or change to /booking/bookappointment if backend changes
+        axios.post("/appointment/book",
           {
             stylistId: ele?.userId?._id,
             date: formDetails.date,
             time: formDetails.time,
-            stylistname: `${ele?.userId?.firstname} ${ele?.userId?.lastname}`,
+            stylistName: `${ele?.userId?.firstname} ${ele?.userId?.lastname}`,
           },
           {
             headers: {
@@ -64,6 +78,7 @@ const BookAppointment = ({ setModalOpen, ele }) => {
               className="form-input"
               value={formDetails.date}
               onChange={inputChange}
+              min={new Date().toISOString().split('T')[0]} // Disable past dates
             />
             <input
               type="time"

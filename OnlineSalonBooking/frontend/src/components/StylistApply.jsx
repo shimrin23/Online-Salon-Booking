@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import "../styles/doctorapply.css"; // You can rename this file to stylistapply.css if you want
+import "../styles/stylistapply.css";
 import axios from "axios";
 
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
@@ -30,9 +30,18 @@ function StylistApply() {
         return toast.error("Please fill in all fields");
       }
 
+      // Validate experience is a positive number
+      if (isNaN(experience) || experience < 0) {
+        return toast.error("Please enter a valid experience in years");
+      }
+
+      // Validate rate is a positive number
+      if (isNaN(rate) || rate <= 0) {
+        return toast.error("Please enter a valid rate amount");
+      }
+
       await toast.promise(
-        axios.post(
-          "/stylist/applyforstylist", // Update backend route accordingly
+        axios.post("/stylist/apply",
           {
             specialization,
             experience,
@@ -52,6 +61,15 @@ function StylistApply() {
           loading: "Submitting application...",
         }
       );
+
+      // Reset form after successful submission
+      setFormDetails({
+        specialization: "",
+        experience: "",
+        rate: "",
+        timing: "Timing",
+      });
+
     } catch (error) {
       toast.error("Something went wrong");
       return error;
@@ -67,25 +85,29 @@ function StylistApply() {
             type="text"
             name="specialization"
             className="form-input"
-            placeholder="Enter your specialization (e.g., Haircut, Coloring)"
+            placeholder="Enter your specialization (e.g., Haircut, Coloring, Styling)"
             value={formDetails.specialization}
             onChange={inputChange}
           />
           <input
-            type="text"
+            type="number"
             name="experience"
             className="form-input"
             placeholder="Enter your experience in years"
             value={formDetails.experience}
             onChange={inputChange}
+            min="0"
+            step="0.5"
           />
           <input
-            type="text"
+            type="number"
             name="rate"
             className="form-input"
-            placeholder="Enter your rate per service"
+            placeholder="Enter your rate per service (₹)"
             value={formDetails.rate}
             onChange={inputChange}
+            min="1"
+            step="10"
           />
           <select
             name="timing"
@@ -95,10 +117,10 @@ function StylistApply() {
             onChange={inputChange}
           >
             <option disabled>Timing</option>
-            <option value="morning">Morning</option>
-            <option value="afternoon">Afternoon</option>
-            <option value="evening">Evening</option>
-            <option value="night">Night</option>
+            <option value="morning">Morning (9 AM - 12 PM)</option>
+            <option value="afternoon">Afternoon (12 PM - 4 PM)</option>
+            <option value="evening">Evening (4 PM - 8 PM)</option>
+            <option value="night">Night (8 PM - 11 PM)</option>
           </select>
           <button type="submit" className="btn form-btn">
             Apply

@@ -18,8 +18,7 @@ const AdminAppointments = () => {
   const getAllAppointments = async () => {
     try {
       dispatch(setLoading(true));
-      const data = await fetchData(`/appointment/getallappointments`); // rename if backend is updated
-      setAppointments(data);
+      const data = await fetchData(`/appointment/getall`);
       dispatch(setLoading(false));
     } catch (error) {
       dispatch(setLoading(false));
@@ -34,11 +33,10 @@ const AdminAppointments = () => {
   const markAsComplete = async (appointment) => {
     try {
       await toast.promise(
-        axios.put(
-          "/appointment/completed", // or /booking/completed
+        axios.put("/appointment/complete",
           {
             appointid: appointment?._id,
-            stylistId: appointment?.doctorId._id,
+            stylistId: appointment?.stylistId._id,
             customerName: `${appointment?.userId?.firstname} ${appointment?.userId?.lastname}`,
           },
           {
@@ -88,7 +86,7 @@ const AdminAppointments = () => {
                     <tr key={ele?._id}>
                       <td>{i + 1}</td>
                       <td>
-                        {ele?.doctorId?.firstname} {ele?.doctorId?.lastname}
+                        {ele?.stylistId?.firstname} {ele?.stylistId?.lastname}
                       </td>
                       <td>
                         {ele?.userId?.firstname} {ele?.userId?.lastname}

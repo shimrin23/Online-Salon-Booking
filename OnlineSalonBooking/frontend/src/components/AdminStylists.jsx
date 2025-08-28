@@ -18,7 +18,7 @@ const AdminStylists = () => {
   const getAllStylists = async () => {
     try {
       dispatch(setLoading(true));
-      const data = await fetchData(`/stylist/getallstylists`); // update this in backend too
+    const data = await fetchData(`/stylist/getall`);
       setStylists(data);
       dispatch(setLoading(false));
     } catch (error) {
@@ -32,8 +32,7 @@ const AdminStylists = () => {
       const confirm = window.confirm("Are you sure you want to remove this stylist?");
       if (confirm) {
         await toast.promise(
-          axios.put(
-            "/stylist/deletestylist", // update backend route
+         axios.put("/stylist/delete", 
             { userId },
             {
               headers: {

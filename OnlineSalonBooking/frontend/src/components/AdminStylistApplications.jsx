@@ -18,7 +18,7 @@ const AdminStylistApplications = () => {
   const getAllApplications = async () => {
     try {
       dispatch(setLoading(true));
-      const data = await fetchData(`/stylist/getnotstylists`);
+      const data = await fetchData(`/stylist/getpending`);
       setApplications(data);
       dispatch(setLoading(false));
     } catch (error) {
@@ -33,7 +33,7 @@ const AdminStylistApplications = () => {
       if (confirm) {
         await toast.promise(
           axios.put(
-            "/stylist/acceptstylist",
+            "/stylist/accept",
             { id: userId },
             {
               headers: {
@@ -60,7 +60,7 @@ const AdminStylistApplications = () => {
       if (confirm) {
         await toast.promise(
           axios.put(
-            "/stylist/rejectstylist",
+            "/stylist/reject",
             { id: userId },
             {
               headers: {

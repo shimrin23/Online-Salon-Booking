@@ -17,7 +17,7 @@ const Users = () => {
 const getAllUsers = async () => {
   try {
     dispatch(setLoading(true));
-    const temp = await fetchData(`/user/getallusers`);
+    const temp = await fetchData(`/user/getall`);
     setUsers(temp);
   } catch (error) {
     toast.error("Failed to fetch users");
@@ -32,7 +32,7 @@ const deleteUser = async (userId) => {
     const confirm = window.confirm("Are you sure you want to delete?");
     if (confirm) {
       await toast.promise(
-        axios.delete("/user/deleteuser", {
+       axios.delete("/user/delete", {
           headers: {
             authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -77,7 +77,7 @@ const deleteUser = async (userId) => {
                     <th>Mobile No.</th>
                     <th>Age</th>
                     <th>Gender</th>
-                    <th>Is Doctor</th>
+                    <th>Is Stylist</th>
                     <th>Remove</th>
                   </tr>
                 </thead>
@@ -99,7 +99,7 @@ const deleteUser = async (userId) => {
                         <td>{ele?.mobile}</td>
                         <td>{ele?.age}</td>
                         <td>{ele?.gender}</td>
-                        <td>{ele?.isDoctor ? "Yes" : "No"}</td>
+                        <td>{ele?.isStylist ? "Yes" : "No"}</td>
                         <td className="select">
                           <button
                             className="btn user-btn"
