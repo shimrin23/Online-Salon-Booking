@@ -9,7 +9,7 @@ import jwt_decode from "jwt-decode";
 import fetchData from "../helper/apiCall";
 import { Link } from "react-router-dom";
 
-axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
+// API base URL is set in apiCall.js
 
 function Login() {
   const dispatch = useDispatch();

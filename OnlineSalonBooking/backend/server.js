@@ -9,7 +9,7 @@ const notificationRouter = require("./routes/notificationRouter");
 const path = require("path");
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;  // Change this line
 
 // Middleware
 app.use(cors());
@@ -21,11 +21,16 @@ app.use("/api/stylist", stylistRouter);
 app.use("/api/appointment", appointRouter);
 app.use("/api/notification", notificationRouter);
 
-// Serve frontend
-app.use(express.static(path.join(__dirname, "./client/build")));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "./client/build/index.html"));
+app.get("/", (req, res) => {
+  res.send("✅ Backend server is running on port 5001");
 });
+
+
+// Serve frontend (commented out for development)
+// app.use(express.static(path.join(__dirname, "./client/build")));
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "./client/build/index.html"));
+// });
 
 // Start server
 app.listen(port, () => {

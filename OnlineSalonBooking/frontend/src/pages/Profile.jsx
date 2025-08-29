@@ -8,7 +8,7 @@ import Loading from "../components/Loading";
 import fetchData from "../helper/apiCall";
 import jwt_decode from "jwt-decode";
 
-axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
+// API base URL is set in apiCall.js
 
 function Profile() {
   const { userId } = jwt_decode(localStorage.getItem("token"));

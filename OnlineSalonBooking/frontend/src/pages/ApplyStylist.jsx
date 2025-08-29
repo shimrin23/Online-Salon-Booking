@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
+// API base URL is set in apiCall.js
 
 const ApplyStylist = () => {
   const navigate = useNavigate();

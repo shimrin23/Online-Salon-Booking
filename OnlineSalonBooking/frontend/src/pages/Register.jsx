@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 
 
-axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
+// API base URL is set in apiCall.js
 
 function Register() {
   const [file, setFile] = useState("");

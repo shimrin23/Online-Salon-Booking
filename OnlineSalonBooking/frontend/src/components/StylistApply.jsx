@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import "../styles/stylistapply.css";
 import axios from "axios";
 
-axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
+// API base URL is set in apiCall.js
 
 function StylistApply() {
   const [formDetails, setFormDetails] = useState({

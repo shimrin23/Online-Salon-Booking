@@ -1,6 +1,7 @@
 import axios from "axios";
 
-axios.defaults.baseURL = process.env.REACT_APP_SERVER_DOMAIN;
+// Set default base URL for API calls
+axios.defaults.baseURL = "http://localhost:5001/api";
 
 const fetchData = async (url) => {
   try {
