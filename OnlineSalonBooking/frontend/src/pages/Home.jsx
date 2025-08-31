@@ -1,5 +1,4 @@
 import React from "react";
-import Contact from "../components/Contact";
 import AboutUs from "../components/AboutUs";
 import Footer from "../components/Footer";
 import Hero from "../components/Hero";
@@ -13,7 +12,7 @@ const Home = () => {
       <Hero />
       <AboutUs />
       <HomeCircles />
-      <Contact />
+      {/* Contact component removed */}
       <Footer />
     </>
   );

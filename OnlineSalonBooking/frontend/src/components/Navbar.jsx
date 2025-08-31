@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import "../styles/navbar.css";
-import { HashLink } from "react-router-hash-link";
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "../redux/reducers/rootSlice";
 import { FiMenu } from "react-icons/fi";
@@ -54,9 +53,7 @@ const Navbar = () => {
               <li>
                 <NavLink to={"/applyforstylist"}>Apply for Stylist</NavLink>
               </li>
-              <li>
-                <HashLink to={"/#contact"}>Contact Us</HashLink>
-              </li>
+              {/* Contact Us link removed */}
               <li>
                 <NavLink to={"/profile"}>Profile</NavLink>
               </li>

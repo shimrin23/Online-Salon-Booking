@@ -1,3 +1,4 @@
+// components/Contact.jsx
 import React, { useState } from "react";
 import "../styles/contact.css";
 
@@ -17,13 +18,13 @@ const Contact = () => {
   };
 
   return (
-    <section className="register-section flex-center" id="contact">
-      <div className="contact-container flex-center contact">
+    <section className="contact-section flex-center" id="contact">
+      <div className="contact-container flex-center">
         <h2 className="form-heading">Contact Us</h2>
         <form
           method="POST"
           action={`https://formspree.io/f/${process.env.REACT_FORMIK_SECRET}`}
-          className="register-form"
+          className="contact-form"
         >
           <input
             type="text"
@@ -48,9 +49,7 @@ const Contact = () => {
             value={formDetails.message}
             onChange={inputChange}
             rows="8"
-            cols="12"
-          ></textarea>
-
+          />
           <button type="submit" className="btn form-btn">
             Send
           </button>
