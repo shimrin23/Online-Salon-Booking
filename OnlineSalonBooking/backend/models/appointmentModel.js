@@ -9,7 +9,7 @@ const schema = mongoose.Schema(
     },
     stylistId: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: "User",
+      ref: "Stylist",   // ✅ FIXED: link to Stylist, not User
       required: true,
     },
     date: {

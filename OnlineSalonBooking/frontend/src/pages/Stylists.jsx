@@ -16,7 +16,7 @@ const Stylists = () => {
 
   const fetchAllStylists = async () => {
     dispatch(setLoading(true));
-    const data = await fetchData(`/stylist/getallstylists`);
+    const data = await fetchData(`/stylists/getall`); // ✅ corrected URL
     setStylists(data);
     dispatch(setLoading(false));
   };

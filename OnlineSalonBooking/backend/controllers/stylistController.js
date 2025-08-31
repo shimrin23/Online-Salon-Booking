@@ -6,13 +6,13 @@ const Appointment = require("../models/appointmentModel");
 const getallstylists = async (req, res) => {
   try {
     let stylists;
-    if (!req.locals) {
+    if (!req.userId) {
+      // Public: return all approved stylists
       stylists = await Stylist.find({ isStylist: true }).populate("userId");
     } else {
+      // Exclude current logged in stylist (if any)
       stylists = await Stylist.find({ isStylist: true })
-        .find({
-          _id: { $ne: req.locals },
-        })
+        .find({ userId: { $ne: req.userId } })
         .populate("userId");
     }
 
@@ -25,9 +25,7 @@ const getallstylists = async (req, res) => {
 const getpendingstylists = async (req, res) => {
   try {
     const stylists = await Stylist.find({ isStylist: false })
-      .find({
-        _id: { $ne: req.locals },
-      })
+      .find({ userId: { $ne: req.userId } })
       .populate("userId");
 
     return res.send(stylists);
@@ -38,13 +36,13 @@ const getpendingstylists = async (req, res) => {
 
 const applyforstylist = async (req, res) => {
   try {
-    const alreadyFound = await Stylist.findOne({ userId: req.locals });
+    const alreadyFound = await Stylist.findOne({ userId: req.userId });
     if (alreadyFound) {
       return res.status(400).send("Application already exists");
     }
 
-    const stylist = Stylist({ ...req.body, userId: req.locals });
-    const result = await stylist.save();
+    const stylist = new Stylist({ ...req.body, userId: req.userId });
+    await stylist.save();
 
     return res.status(201).send("Application submitted successfully");
   } catch (error) {
@@ -54,17 +52,17 @@ const applyforstylist = async (req, res) => {
 
 const acceptstylist = async (req, res) => {
   try {
-    const user = await User.findOneAndUpdate(
+    await User.findOneAndUpdate(
       { _id: req.body.id },
       { isStylist: true, status: "accepted" }
     );
 
-    const stylist = await Stylist.findOneAndUpdate(
+    await Stylist.findOneAndUpdate(
       { userId: req.body.id },
       { isStylist: true }
     );
 
-    const notification = await Notification({
+    const notification = new Notification({
       userId: req.body.id,
       content: `Congratulations, Your stylist application has been accepted.`,
     });
@@ -79,13 +77,13 @@ const acceptstylist = async (req, res) => {
 
 const rejectstylist = async (req, res) => {
   try {
-    const details = await User.findOneAndUpdate(
+    await User.findOneAndUpdate(
       { _id: req.body.id },
       { isStylist: false, status: "rejected" }
     );
-    const delStylist = await Stylist.findOneAndDelete({ userId: req.body.id });
+    await Stylist.findOneAndDelete({ userId: req.body.id });
 
-    const notification = await Notification({
+    const notification = new Notification({
       userId: req.body.id,
       content: `Sorry, Your stylist application has been rejected.`,
     });
@@ -100,15 +98,10 @@ const rejectstylist = async (req, res) => {
 
 const deletestylist = async (req, res) => {
   try {
-    const result = await User.findByIdAndUpdate(req.body.userId, {
-      isStylist: false,
-    });
-    const removeStylist = await Stylist.findOneAndDelete({
-      userId: req.body.userId,
-    });
-    const removeAppoint = await Appointment.findOneAndDelete({
-      stylistId: req.body.userId,
-    });
+    await User.findByIdAndUpdate(req.body.userId, { isStylist: false });
+    await Stylist.findOneAndDelete({ userId: req.body.userId });
+    await Appointment.deleteMany({ stylistId: req.body.userId });
+
     return res.send("Stylist deleted successfully");
   } catch (error) {
     console.log("error", error);

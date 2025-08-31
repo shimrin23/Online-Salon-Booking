@@ -9,7 +9,7 @@ const auth = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.locals = decoded.userId;
+    req.userId = decoded.userId;   // ✅ changed from req.locals
     next();
   } catch (error) {
     res.status(401).send("Invalid token.");
