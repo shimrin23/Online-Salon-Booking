@@ -49,7 +49,8 @@ function Register() {
 
     try {
       await toast.promise(
-        axios.post("/api/users/register", { // ✅ Edited endpoint
+        // ⚡ Edited this line: Added full backend URL
+        axios.post("http://localhost:5001/api/users/register", { 
           firstname,
           lastname,
           email,
