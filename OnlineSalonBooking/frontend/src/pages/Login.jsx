@@ -39,12 +39,9 @@ function Login() {
         return toast.error("Password must be at least 5 characters long");
       }
 
-      // Edited: Added console.log to debug request
-      console.log("Sending login request:", { email, password });
-
+      // Edited: fixed endpoint URL
       const { data } = await toast.promise(
-        // Edited: Ensure backend endpoint matches your API
-        axios.post("/api/users/login", { email, password }),
+        axios.post("/users/login", { email, password }),
         {
           pending: "Logging in...",
           success: "Login successful",
@@ -52,9 +49,6 @@ function Login() {
           loading: "Logging user...",
         }
       );
-
-      // Edited: Added console.log to see backend response
-      console.log("Backend response:", data);
 
       localStorage.setItem("token", data.token);
 
@@ -108,7 +102,6 @@ function Login() {
           </NavLink>
         </p>
        <Link to="/" className="btn home-btn">← Back to Home</Link>
-
       </div>
     </section>
   );
