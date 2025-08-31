@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/contact.css";
+import "../styles/stylistapply.css";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +13,8 @@ const ApplyStylist = () => {
   const [formDetails, setFormDetails] = useState({
     specialization: "",
     experience: "",
-    rate: "",
+    fees: "",
+    timing: "morning",
   });
 
   const inputChange = (e) => {
@@ -29,7 +30,7 @@ const ApplyStylist = () => {
     try {
       await toast.promise(
         axios.post(
-          "/stylist/applyforstylist",
+          "/api/stylist/apply", // Keep relative path
           {
             ...formDetails,
           },
@@ -56,10 +57,10 @@ const ApplyStylist = () => {
     <>
       <Navbar />
       <section
-        className="register-section flex-center apply-stylist"
+        className="apply-stylist-section flex-center"
         id="contact"
       >
-        <div className="register-container flex-center contact">
+        <div className="apply-stylist-container flex-center">
           <h2 className="form-heading">Apply as a Stylist</h2>
           <form className="register-form">
             <input
@@ -80,10 +81,10 @@ const ApplyStylist = () => {
             />
             <input
               type="number"
-              name="rate"
+              name="fees"
               className="form-input"
               placeholder="Enter your rate per service (₹)"
-              value={formDetails.rate}
+              value={formDetails.fees}
               onChange={inputChange}
             />
             <button

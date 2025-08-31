@@ -68,7 +68,7 @@ const Navbar = () => {
               </li>
               <li>
                 <NavLink className="btn" to={"/register"}>
-                  Register
+                  SignUp
                 </NavLink>
               </li>
             </>

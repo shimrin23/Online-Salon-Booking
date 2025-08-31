@@ -25,17 +25,17 @@ const bookappointment = async (req, res) => {
       date: req.body.date,
       time: req.body.time,
       stylistId: req.body.stylistId,
-      userId: req.locals,
+      userId: req.userId,
     });
 
     const usernotification = Notification({
-      userId: req.locals,
+      userId: req.userId,
       content: `You booked an appointment with ${req.body.stylistName} for ${req.body.date} ${req.body.time}`,
     });
 
     await usernotification.save();
 
-    const user = await User.findById(req.locals);
+    const user = await User.findById(req.userId);
 
     const stylistnotification = Notification({
       userId: req.body.stylistId,
@@ -60,13 +60,13 @@ const completed = async (req, res) => {
     );
 
     const usernotification = Notification({
-      userId: req.locals,
+      userId: req.userId,
       content: `Your appointment with ${req.body.stylistName} has been completed`,
     });
 
     await usernotification.save();
 
-    const user = await User.findById(req.locals);
+    const user = await User.findById(req.userId);
 
     const stylistnotification = Notification({
       userId: req.body.stylistId,

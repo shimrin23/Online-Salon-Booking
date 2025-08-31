@@ -21,12 +21,13 @@ const Appointments = () => {
     try {
       dispatch(setLoading(true));
       const temp = await fetchData(
-        `/appointment/getallappointments?search=${userId}`
+        `/appointment/getall`
       );
       setAppointments(temp);
       dispatch(setLoading(false));
     } catch (error) {
       toast.error("Failed to fetch appointments");
+      dispatch(setLoading(false));
     }
   };
 

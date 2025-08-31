@@ -1,8 +1,30 @@
 @import url(app.css);
 
+/* Fix the layout issue */
+.register-section {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* ✅ This ensures content starts from top */
+  padding-top: 2rem;
+}
+
+.register-container {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem; /* ✅ Add space before footer */
+}
+
 .apply-stylist-section {
   margin: 0 auto;
   width: 30%;
+  min-height: 100vh;
+  padding: 2rem 0;
 }
 
 .apply-stylist-container {
@@ -10,6 +32,87 @@
   gap: 2rem;
   width: 100%;
 }
+
+/* Add these missing form styles */
+.register-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-input,
+textarea,
+select {
+  font-size: 1rem;
+  background-color: rgb(234, 234, 234);
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-family: var(--font-family);
+  transition: all 0.3s ease;
+}
+
+.form-input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  background-color: white;
+  box-shadow: 0 0 0 2px var(--dark-blue);
+}
+
+.form-btn {
+  background-color: var(--dark-blue);
+  color: var(--white);
+  font-size: 1rem;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 2px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: var(--font-family);
+  transition: all 0.3s ease;
+}
+
+.form-btn:hover {
+  background-color: var(--darker-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 option {
   text-transform: capitalize;
 }
+/* Responsive design */
+@media (max-width: 1184px) {
+  .apply-stylist-section {
+    width: 35%;
+  }
+}
+
+@media (max-width: 1120px) {
+  .apply-stylist-section {
+    width: 40%;
+  }
+}
+
+@media (max-width: 746px) {
+  .apply-stylist-section {
+    width: 50%;
+  }
+}
+
+@media (max-width: 600px) {
+  .apply-stylist-section {
+    width: 70%;
+  }
+}
+
+@media (max-width: 408px) {
+  .apply-stylist-section {
+    width: 85%;
+  }
+}
+

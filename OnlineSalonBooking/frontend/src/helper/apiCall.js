@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// Set default base URL for API calls
-axios.defaults.baseURL = "http://localhost:5001/api";
+// Remove the base URL when using proxy
+// axios.defaults.baseURL = "http://localhost:5001"; // Comment out or remove this line
 
 const fetchData = async (url) => {
   try {

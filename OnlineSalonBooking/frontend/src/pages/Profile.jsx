@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Loading from "../components/Loading";
 import fetchData from "../helper/apiCall";
 import jwt_decode from "jwt-decode";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 // API base URL is set in apiCall.js
 
@@ -91,7 +93,7 @@ function Profile() {
 
       await toast.promise(
         axios.put(
-          "/user/updateprofile",
+          "/api/users/updateprofile", // ✅ Add /api prefix
           {
             firstname,
             lastname,
@@ -100,7 +102,7 @@ function Profile() {
             address,
             gender,
             email,
-            password: password || undefined, // Only send if password entered
+            password: password || undefined,
           },
           {
             headers: {
@@ -124,13 +126,13 @@ function Profile() {
 
   return (
     <>
+      <Navbar />
       {loading ? (
         <Loading />
       ) : (
         <section className="register-section flex-center">
           <div className="profile-container flex-center">
             <h2 className="form-heading">Profile</h2>
-            <img src={file} alt="profile" className="profile-pic" />
             <form onSubmit={formSubmit} className="register-form">
               <div className="form-same-row">
                 <input
@@ -225,6 +227,7 @@ function Profile() {
           </div>
         </section>
       )}
+      <Footer />
     </>
   );
 }

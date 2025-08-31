@@ -92,7 +92,7 @@ const updateprofile = async (req, res) => {
       delete updateData.password;
     }
     const result = await User.findByIdAndUpdate(
-      { _id: req.locals },
+      { _id: req.userId }, // ✅ Change this from req.locals to req.userId
       updateData
     );
     if (!result) {

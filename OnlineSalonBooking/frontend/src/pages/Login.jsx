@@ -8,6 +8,7 @@ import { setUserInfo } from "../redux/reducers/rootSlice";
 import jwt_decode from "jwt-decode";
 import fetchData from "../helper/apiCall";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar"; // ✅ Add this import
 
 // API base URL is set in apiCall.js
 
@@ -39,9 +40,9 @@ function Login() {
         return toast.error("Password must be at least 5 characters long");
       }
 
-      // ✅ Edited: Correct backend endpoint
+      // ✅ Fixed: Use correct backend endpoint with /api prefix
       const { data } = await toast.promise(
-        axios.post("/users/login", { email, password }),
+        axios.post("/api/users/login", { email, password }),
         {
           pending: "Logging in...",
           success: "Login successful",
@@ -56,8 +57,8 @@ function Login() {
       const decoded = jwt_decode(data.token);
       const userId = decoded.userId;
 
-      // Fetch full user info
-      const userData = await fetchData(`/users/getuser/${userId}`);
+      // ✅ Fixed: Use correct backend endpoint with /api prefix
+      const userData = await fetchData(`/api/users/getuser/${userId}`);
 
       // Dispatch full user info
       dispatch(setUserInfo(userData));
@@ -71,39 +72,41 @@ function Login() {
   };
 
   return (
-    <section className="register-section flex-center">
-      <div className="register-container flex-center">
-        <h2 className="form-heading">Sign In</h2>
-        <form onSubmit={formSubmit} className="register-form">
-          <input
-            type="email"
-            name="email"
-            className="form-input"
-            placeholder="Enter your email"
-            value={formDetails.email}
-            onChange={inputChange}
-          />
-          <input
-            type="password"
-            name="password"
-            className="form-input"
-            placeholder="Enter your password"
-            value={formDetails.password}
-            onChange={inputChange}
-          />
-          <button type="submit" className="btn form-btn">
-            Sign In
-          </button>
-        </form>
-        <p>
-          Not a user?{" "}
-          <NavLink className="login-link" to={"/register"}>
-            Register
-          </NavLink>
-        </p>
-        <Link to="/" className="btn home-btn">← Back to Home</Link>
-      </div>
-    </section>
+    <>
+      <Navbar /> {/* ✅ Add this line */}
+      <section className="register-section flex-center">
+        <div className="register-container flex-center">
+          <h2 className="form-heading">Sign In</h2>
+          <form onSubmit={formSubmit} className="register-form">
+            <input
+              type="email"
+              name="email"
+              className="form-input"
+              placeholder="Enter your email"
+              value={formDetails.email}
+              onChange={inputChange}
+            />
+            <input
+              type="password"
+              name="password"
+              className="form-input"
+              placeholder="Enter your password"
+              value={formDetails.password}
+              onChange={inputChange}
+            />
+            <button type="submit" className="btn form-btn">
+              Sign In
+            </button>
+          </form>
+          <p>
+            Not a user?{" "}
+            <NavLink className="login-link" to={"/register"}>
+              Sign up
+            </NavLink>
+          </p>
+        </div>
+      </section>
+    </>
   );
 }
 

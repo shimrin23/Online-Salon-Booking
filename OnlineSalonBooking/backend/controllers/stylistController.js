@@ -18,6 +18,7 @@ const getallstylists = async (req, res) => {
 
     return res.send(stylists);
   } catch (error) {
+    console.error("Error getting stylists:", error); // Added logging
     res.status(500).send("Unable to get stylists");
   }
 };
@@ -41,11 +42,19 @@ const applyforstylist = async (req, res) => {
       return res.status(400).send("Application already exists");
     }
 
-    const stylist = new Stylist({ ...req.body, userId: req.userId });
+    // Ensure all required fields are present
+    const stylistData = {
+      ...req.body,
+      userId: req.userId,
+      timing: req.body.timing || "morning" // Default timing if not provided
+    };
+
+    const stylist = new Stylist(stylistData);
     await stylist.save();
 
     return res.status(201).send("Application submitted successfully");
   } catch (error) {
+    console.error("Stylist application error:", error); // Added logging
     res.status(500).send("Unable to submit application");
   }
 };

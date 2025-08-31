@@ -8,6 +8,7 @@ import Loading from "../components/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../redux/reducers/rootSlice";
 import Empty from "../components/Empty";
+import axios from "axios";
 
 const Stylists = () => {
   const [stylists, setStylists] = useState([]);
@@ -16,9 +17,22 @@ const Stylists = () => {
 
   const fetchAllStylists = async () => {
     dispatch(setLoading(true));
-    const data = await fetchData(`/stylists/getall`); // ✅ corrected URL
-    setStylists(data);
-    dispatch(setLoading(false));
+    try {
+      const data = await fetchData(`/stylist/getall`);
+      setStylists(data);
+    } catch (error) {
+      console.error("Error fetching stylists:", error);
+      // If it's an auth error, try without auth
+      try {
+        const response = await axios.get("/api/stylist/getall");
+        setStylists(response.data);
+      } catch (secondError) {
+        console.error("Second error:", secondError);
+        setStylists([]);
+      }
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
 
   useEffect(() => {
