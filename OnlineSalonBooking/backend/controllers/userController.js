@@ -26,12 +26,8 @@ const getallusers = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    // Edited: Added debug log for request body
     console.log("Login request body:", req.body);
-
     const emailPresent = await User.findOne({ email: req.body.email });
-
-    // Edited: Added debug log for user fetched from DB
     console.log("Found user:", emailPresent);
 
     if (!emailPresent) {
@@ -42,15 +38,12 @@ const login = async (req, res) => {
       req.body.password,
       emailPresent.password
     );
-
-    // Edited: Added debug log for password match result
     console.log("Password match:", verifyPass);
 
     if (!verifyPass) {
       return res.status(400).send("Incorrect credentials");
     }
 
-    // Edited: Added check for missing JWT_SECRET
     if (!process.env.JWT_SECRET) {
       console.error("JWT_SECRET is not defined in environment variables");
     }
@@ -58,13 +51,11 @@ const login = async (req, res) => {
     const token = jwt.sign(
       { userId: emailPresent._id, isAdmin: emailPresent.isAdmin },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "2 days",
-      }
+      { expiresIn: "2 days" }
     );
+
     return res.status(201).send({ msg: "User logged in successfully", token });
   } catch (error) {
-    // Edited: Added error logging
     console.error("Login error:", error);
     res.status(500).send("Unable to login user");
   }
@@ -77,13 +68,17 @@ const register = async (req, res) => {
       return res.status(400).send("Email already exists");
     }
     const hashedPass = await bcrypt.hash(req.body.password, 10);
-    const user = await User({ ...req.body, password: hashedPass });
+    const user = new User({ ...req.body, password: hashedPass });
+
     const result = await user.save();
     if (!result) {
+      console.error("Failed to save user:", result);
       return res.status(500).send("Unable to register user");
     }
+
     return res.status(201).send("User registered successfully");
   } catch (error) {
+    console.error("Register error:", error); // Added debug log
     res.status(500).send("Unable to register user");
   }
 };
@@ -91,14 +86,11 @@ const register = async (req, res) => {
 const updateprofile = async (req, res) => {
   try {
     let updateData = { ...req.body };
-    
-    // Only hash password if it's provided
     if (req.body.password) {
       updateData.password = await bcrypt.hash(req.body.password, 10);
     } else {
-      delete updateData.password; // Remove password field if not provided
+      delete updateData.password;
     }
-    
     const result = await User.findByIdAndUpdate(
       { _id: req.locals },
       updateData

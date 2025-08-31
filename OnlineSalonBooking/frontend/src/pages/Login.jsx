@@ -39,9 +39,9 @@ function Login() {
         return toast.error("Password must be at least 5 characters long");
       }
 
-      // Edited: fixed endpoint URL
+      // ✅ Edited: Correct backend endpoint
       const { data } = await toast.promise(
-        axios.post("/users/login", { email, password }),
+        axios.post("/api/users/login", { email, password }),
         {
           pending: "Logging in...",
           success: "Login successful",
@@ -57,7 +57,7 @@ function Login() {
       const userId = decoded.userId;
 
       // Fetch full user info
-      const userData = await fetchData(`/user/getuser/${userId}`);
+      const userData = await fetchData(`/users/getuser/${userId}`);
 
       // Dispatch full user info
       dispatch(setUserInfo(userData));
@@ -66,7 +66,7 @@ function Login() {
       navigate("/");
     } catch (error) {
       toast.error("Login failed. Please check your credentials.");
-      console.error("Login error:", error); // Edited: more explicit error log
+      console.error("Login error:", error);
     }
   };
 
@@ -101,7 +101,7 @@ function Login() {
             Register
           </NavLink>
         </p>
-       <Link to="/" className="btn home-btn">← Back to Home</Link>
+        <Link to="/" className="btn home-btn">← Back to Home</Link>
       </div>
     </section>
   );

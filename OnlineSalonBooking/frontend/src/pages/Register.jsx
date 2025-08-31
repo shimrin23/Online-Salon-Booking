@@ -5,7 +5,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 
-
 // API base URL is set in apiCall.js
 
 function Register() {
@@ -50,7 +49,7 @@ function Register() {
 
     try {
       await toast.promise(
-        axios.post("/user/register", {
+        axios.post("/api/users/register", { // ✅ Edited endpoint
           firstname,
           lastname,
           email,
@@ -70,11 +69,8 @@ function Register() {
   };
 
   return (
-    
     <section className="register-section flex-center">
       <div className="register-container flex-center">
-        
-
         <h2 className="form-heading">Sign Up</h2>
         <form onSubmit={formSubmit} className="register-form">
           <input
@@ -104,7 +100,6 @@ function Register() {
             onChange={inputChange}
             required
           />
-
           <input
             type="password"
             name="password"
