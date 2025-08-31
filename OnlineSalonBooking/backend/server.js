@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use("/api/user", userRouter);
+app.use("/api/users", userRouter); // Edited: changed from "/api/user" to "/api/users"
 app.use("/api/stylist", stylistRouter);
 app.use("/api/appointment", appointRouter);
 app.use("/api/notification", notificationRouter);
@@ -24,7 +24,6 @@ app.use("/api/notification", notificationRouter);
 app.get("/", (req, res) => {
   res.send("✅ Backend server is running on port 5001");
 });
-
 
 // Serve frontend (commented out for development)
 // app.use(express.static(path.join(__dirname, "./client/build")));
