@@ -18,18 +18,31 @@ const Stylists = () => {
   const fetchAllStylists = async () => {
     dispatch(setLoading(true));
     try {
-      const data = await fetchData(`/stylist/getall`);
-      setStylists(data);
-    } catch (error) {
-      console.error("Error fetching stylists:", error);
-      // If it's an auth error, try without auth
-      try {
-        const response = await axios.get("/api/stylist/getall");
+      console.log("Fetching stylists from:", "/api/stylist/getall");
+      const response = await axios.get("/api/stylist/getall");
+      console.log("Stylists API response:", response);
+      console.log("Stylists data:", response.data);
+      
+      if (Array.isArray(response.data)) {
         setStylists(response.data);
-      } catch (secondError) {
-        console.error("Second error:", secondError);
+      } else {
+        console.error("Unexpected data format:", response.data);
         setStylists([]);
       }
+    } catch (error) {
+      console.error("Error fetching stylists:", error);
+      console.error("Error details:", error.response?.data);
+      console.error("Error status:", error.response?.status);
+      
+      // Try the test endpoint to debug
+      try {
+        const testResponse = await axios.get("/api/stylist/test");
+        console.log("Test endpoint response:", testResponse.data);
+      } catch (testError) {
+        console.error("Test endpoint also failed:", testError);
+      }
+      
+      setStylists([]);
     } finally {
       dispatch(setLoading(false));
     }

@@ -85,21 +85,31 @@ const register = async (req, res) => {
 
 const updateprofile = async (req, res) => {
   try {
+    console.log("Update profile request:", req.body); // Debug log
+    console.log("User ID from token:", req.userId); // Debug log
+    
     let updateData = { ...req.body };
     if (req.body.password) {
       updateData.password = await bcrypt.hash(req.body.password, 10);
     } else {
       delete updateData.password;
     }
+    
     const result = await User.findByIdAndUpdate(
-      { _id: req.userId }, // ✅ Change this from req.locals to req.userId
-      updateData
+      { _id: req.userId },
+      updateData,
+      { new: true } // Return updated document
     );
+    
     if (!result) {
-      return res.status(500).send("Unable to update user");
+      console.error("User not found for update:", req.userId);
+      return res.status(404).send("User not found");
     }
+    
+    console.log("Profile updated successfully:", result);
     return res.status(201).send("User updated successfully");
   } catch (error) {
+    console.error("Update profile error:", error);
     res.status(500).send("Unable to update user");
   }
 };

@@ -7,18 +7,17 @@ const getallstylists = async (req, res) => {
   try {
     let stylists;
     if (!req.userId) {
-      // Public: return all approved stylists
-      stylists = await Stylist.find({ isStylist: true }).populate("userId");
+      // Public: return all approved stylists AND pending applications
+      stylists = await Stylist.find({}).populate("userId");
     } else {
       // Exclude current logged in stylist (if any)
-      stylists = await Stylist.find({ isStylist: true })
-        .find({ userId: { $ne: req.userId } })
+      stylists = await Stylist.find({ userId: { $ne: req.userId } })
         .populate("userId");
     }
 
     return res.send(stylists);
   } catch (error) {
-    console.error("Error getting stylists:", error); // Added logging
+    console.error("Error getting stylists:", error);
     res.status(500).send("Unable to get stylists");
   }
 };
@@ -118,6 +117,22 @@ const deletestylist = async (req, res) => {
   }
 };
 
+// Add this function to test database connection
+const testStylists = async (req, res) => {
+  try {
+    const allStylists = await Stylist.find({}).populate("userId");
+    console.log("All stylists in database:", allStylists);
+    return res.json({
+      count: allStylists.length,
+      stylists: allStylists,
+      message: "Database connection test"
+    });
+  } catch (error) {
+    console.error("Test error:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getallstylists,
   getpendingstylists,
@@ -125,4 +140,5 @@ module.exports = {
   applyforstylist,
   acceptstylist,
   rejectstylist,
+  testStylists, // Add this line
 };

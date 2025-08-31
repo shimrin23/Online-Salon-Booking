@@ -16,4 +16,7 @@ stylistRouter.put("/accept", auth, stylistController.acceptstylist);
 
 stylistRouter.put("/reject", auth, stylistController.rejectstylist);
 
+// Add this route for testing
+stylistRouter.get("/test", stylistController.testStylists);
+
 module.exports = stylistRouter;

@@ -34,7 +34,8 @@ function Profile() {
   const getUser = async () => {
     try {
       dispatch(setLoading(true));
-      const temp = await fetchData(`/user/getuser/${userId}`);
+      // ✅ Fixed: Use correct API endpoint
+      const temp = await fetchData(`/api/users/getuser/${userId}`);
       setFormDetails({
         ...temp,
         password: "",
