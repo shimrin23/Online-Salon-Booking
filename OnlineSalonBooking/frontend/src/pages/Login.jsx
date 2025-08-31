@@ -41,7 +41,7 @@ function Login() {
 
       // ✅ Edited: Correct backend endpoint
       const { data } = await toast.promise(
-        axios.post("/api/users/login", { email, password }),
+        axios.post("/users/login", { email, password }),
         {
           pending: "Logging in...",
           success: "Login successful",
