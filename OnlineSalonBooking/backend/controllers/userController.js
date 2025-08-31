@@ -26,17 +26,35 @@ const getallusers = async (req, res) => {
 
 const login = async (req, res) => {
   try {
+    // Edited: Added debug log for request body
+    console.log("Login request body:", req.body);
+
     const emailPresent = await User.findOne({ email: req.body.email });
+
+    // Edited: Added debug log for user fetched from DB
+    console.log("Found user:", emailPresent);
+
     if (!emailPresent) {
       return res.status(400).send("Incorrect credentials");
     }
+
     const verifyPass = await bcrypt.compare(
       req.body.password,
       emailPresent.password
     );
+
+    // Edited: Added debug log for password match result
+    console.log("Password match:", verifyPass);
+
     if (!verifyPass) {
       return res.status(400).send("Incorrect credentials");
     }
+
+    // Edited: Added check for missing JWT_SECRET
+    if (!process.env.JWT_SECRET) {
+      console.error("JWT_SECRET is not defined in environment variables");
+    }
+
     const token = jwt.sign(
       { userId: emailPresent._id, isAdmin: emailPresent.isAdmin },
       process.env.JWT_SECRET,
@@ -46,6 +64,8 @@ const login = async (req, res) => {
     );
     return res.status(201).send({ msg: "User logged in successfully", token });
   } catch (error) {
+    // Edited: Added error logging
+    console.error("Login error:", error);
     res.status(500).send("Unable to login user");
   }
 };

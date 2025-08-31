@@ -9,7 +9,6 @@ import { Link } from "react-router-dom";
 // API base URL is set in apiCall.js
 
 function Register() {
-  const [file, setFile] = useState("");
   const [loading, setLoading] = useState(false);
   const [formDetails, setFormDetails] = useState({
     firstname: "",
@@ -27,38 +26,9 @@ function Register() {
     setFormDetails((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Upload profile image to Cloudinary
-  const onUpload = async (file) => {
-    if (!file) return;
-    setLoading(true);
-
-    if (file.type === "image/jpeg" || file.type === "image/png") {
-      const data = new FormData();
-      data.append("file", file);
-      data.append("upload_preset", process.env.REACT_APP_CLOUDINARY_PRESET);
-      data.append("cloud_name", process.env.REACT_APP_CLOUDINARY_CLOUD_NAME);
-
-      try {
-        const res = await fetch(process.env.REACT_APP_CLOUDINARY_BASE_URL, {
-          method: "POST",
-          body: data,
-        });
-        const result = await res.json();
-        setFile(result.url.toString());
-      } catch (error) {
-        toast.error("Image upload failed. Please try again.");
-      }
-    } else {
-      toast.error("Please select an image in jpeg or png format");
-    }
-    setLoading(false);
-  };
-
   // Handle form submit
   const formSubmit = async (e) => {
     e.preventDefault();
-    if (loading) return toast.error("Image upload in progress. Please wait.");
-    if (!file) return toast.error("Please upload a profile picture.");
 
     const { firstname, lastname, email, password, confpassword } = formDetails;
 
@@ -85,7 +55,6 @@ function Register() {
           lastname,
           email,
           password,
-          pic: file,
         }),
         {
           pending: "Registering user...",
@@ -135,14 +104,7 @@ function Register() {
             onChange={inputChange}
             required
           />
-          <input
-            type="file"
-            name="profile-pic"
-            id="profile-pic"
-            className="form-input"
-            accept="image/png, image/jpeg"
-            onChange={(e) => onUpload(e.target.files[0])}
-          />
+
           <input
             type="password"
             name="password"
@@ -161,7 +123,7 @@ function Register() {
             onChange={inputChange}
             required
           />
-          <button type="submit" className="btn form-btn" disabled={loading}>
+          <button type="submit" className="btn form-btn">
             Sign Up
           </button>
         </form>
