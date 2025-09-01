@@ -36,16 +36,37 @@ const getpendingstylists = async (req, res) => {
 
 const applyforstylist = async (req, res) => {
   try {
-    const alreadyFound = await Stylist.findOne({ userId: req.userId });
-    if (alreadyFound) {
-      return res.status(400).send("Application already exists");
+    // Check if user is already an approved stylist
+    const existingStylist = await Stylist.findOne({ userId: req.userId });
+    
+    if (existingStylist && existingStylist.isStylist === true) {
+      return res.status(400).send("You are already an approved stylist");
+    }
+    
+    if (existingStylist && existingStylist.isStylist === false) {
+      // Update existing pending application
+      const updatedStylist = await Stylist.findOneAndUpdate(
+        { userId: req.userId },
+        {
+          specialization: req.body.specialization,
+          experience: Number(req.body.experience),
+          fees: Number(req.body.fees),
+          timing: req.body.timing || "morning"
+        },
+        { new: true }
+      );
+      
+      return res.status(200).send("Application updated successfully");
     }
 
-    // Ensure all required fields are present
+    // Create new application
     const stylistData = {
-      ...req.body,
+      specialization: req.body.specialization,
+      experience: Number(req.body.experience),
+      fees: Number(req.body.fees),
+      timing: req.body.timing || "morning",
       userId: req.userId,
-      timing: req.body.timing || "morning" // Default timing if not provided
+      isStylist: false
     };
 
     const stylist = new Stylist(stylistData);
@@ -53,7 +74,7 @@ const applyforstylist = async (req, res) => {
 
     return res.status(201).send("Application submitted successfully");
   } catch (error) {
-    console.error("Stylist application error:", error); // Added logging
+    console.error("Stylist application error:", error);
     res.status(500).send("Unable to submit application");
   }
 };
@@ -140,5 +161,5 @@ module.exports = {
   applyforstylist,
   acceptstylist,
   rejectstylist,
-  testStylists, // Add this line
+  testStylists,
 };

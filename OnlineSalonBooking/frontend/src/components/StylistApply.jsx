@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import "../styles/stylistapply.css";
 import axios from "axios";
+import convertToBase64 from "../helper/convertImage";
 
 // API base URL is set in apiCall.js
 
@@ -12,6 +13,8 @@ function StylistApply() {
     rate: "",
     timing: "Timing",
   });
+  const [profilePic, setProfilePic] = useState(null);
+  const [profilePicPreview, setProfilePicPreview] = useState("");
 
   const inputChange = (e) => {
     const { name, value } = e.target;
@@ -19,6 +22,24 @@ function StylistApply() {
       ...formDetails,
       [name]: value,
     });
+  };
+
+  const handleProfilePicChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 5000000) { // 5MB limit
+        toast.error("Profile picture size should be less than 5MB");
+        return;
+      }
+      
+      try {
+        const base64 = await convertToBase64(file);
+        setProfilePic(file);
+        setProfilePicPreview(base64);
+      } catch (error) {
+        toast.error("Error processing image");
+      }
+    }
   };
 
   const formSubmit = async (e) => {
@@ -40,8 +61,33 @@ function StylistApply() {
         return toast.error("Please enter a valid rate amount");
       }
 
+      // First, update profile picture if provided
+      if (profilePic) {
+        try {
+          await toast.promise(
+            axios.put("/api/users/updateprofile",
+              { pic: profilePicPreview },
+              {
+                headers: {
+                  authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              }
+            ),
+            {
+              pending: "Updating profile picture...",
+              success: "Profile picture updated successfully!",
+              error: "Unable to update profile picture",
+            }
+          );
+        } catch (error) {
+          console.error("Profile picture update error:", error);
+          // Continue with stylist application even if profile picture update fails
+        }
+      }
+
+      // Submit stylist application
       await toast.promise(
-        axios.post("/stylist/apply",
+        axios.post("/api/stylist/apply",
           {
             specialization,
             experience,
@@ -69,6 +115,8 @@ function StylistApply() {
         rate: "",
         timing: "Timing",
       });
+      setProfilePic(null);
+      setProfilePicPreview("");
 
     } catch (error) {
       toast.error("Something went wrong");
@@ -81,6 +129,29 @@ function StylistApply() {
       <div className="apply-stylist-container flex-center">
         <h2 className="form-heading">Apply To Be A Stylist</h2>
         <form onSubmit={formSubmit} className="register-form">
+          {/* Profile Picture Upload */}
+          <div className="profile-pic-upload">
+            <label htmlFor="profilePic" className="profile-pic-label">
+              Profile Picture (Optional)
+            </label>
+            <input
+              type="file"
+              id="profilePic"
+              accept="image/*"
+              onChange={handleProfilePicChange}
+              className="profile-pic-input"
+            />
+            {profilePicPreview && (
+              <div className="profile-pic-preview">
+                <img 
+                  src={profilePicPreview} 
+                  alt="Profile preview" 
+                  className="preview-image"
+                />
+              </div>
+            )}
+          </div>
+          
           <input
             type="text"
             name="specialization"

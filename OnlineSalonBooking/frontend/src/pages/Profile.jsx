@@ -9,6 +9,7 @@ import fetchData from "../helper/apiCall";
 import jwt_decode from "jwt-decode";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import convertToBase64 from "../helper/convertImage";
 
 // API base URL is set in apiCall.js
 
@@ -56,6 +57,12 @@ function Profile() {
     getUser();
   }, []);
 
+  // Handle file input change
+  const onUpload = async (e) => {
+    const base64 = await convertToBase64(e.target.files[0]);
+    setFile(base64);
+  };
+
   // Handle input changes
   const inputChange = (e) => {
     const { name, value } = e.target;
@@ -94,7 +101,7 @@ function Profile() {
 
       await toast.promise(
         axios.put(
-          "/api/users/updateprofile", // ✅ Add /api prefix
+          "/api/users/updateprofile",
           {
             firstname,
             lastname,
@@ -104,6 +111,7 @@ function Profile() {
             gender,
             email,
             password: password || undefined,
+            pic: file, // Add profile picture to update
           },
           {
             headers: {
@@ -134,6 +142,26 @@ function Profile() {
         <section className="register-section flex-center">
           <div className="profile-container flex-center">
             <h2 className="form-heading">Profile</h2>
+            
+            {/* Profile Picture Section */}
+            <div className="profile-pic-section flex-center">
+              <img
+                src={file || "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"}
+                alt="profile"
+                className="profile-pic"
+              />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={onUpload}
+                className="profile-pic-input"
+                id="profile-pic-input"
+              />
+              <label htmlFor="profile-pic-input" className="profile-pic-label">
+                Change Photo
+              </label>
+            </div>
+
             <form onSubmit={formSubmit} className="register-form">
               <div className="form-same-row">
                 <input
