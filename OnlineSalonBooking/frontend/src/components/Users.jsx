@@ -32,7 +32,7 @@ const Users = () => {
       const confirm = window.confirm("Are you sure you want to delete?");
       if (confirm) {
         await toast.promise(
-          axios.delete("/api/user/delete", { // Fixed: Added /api prefix
+          axios.delete("/api/users/delete", { // Fixed: Changed from /api/user/delete to /api/users/delete
             headers: {
               authorization: `Bearer ${localStorage.getItem("token")}`,
             },
@@ -112,7 +112,6 @@ const Users = () => {
                     <th>Mobile No.</th>
                     <th>Age</th>
                     <th>Gender</th>
-                    <th>Is Stylist</th>
                     <th>Admin Status</th>
                     <th>Actions</th>
                   </tr>
@@ -135,7 +134,6 @@ const Users = () => {
                         <td>{ele?.mobile}</td>
                         <td>{ele?.age}</td>
                         <td>{ele?.gender}</td>
-                        <td>{ele?.isStylist ? "Yes" : "No"}</td>
                         <td>
                           <span className={`admin-status ${ele?.isAdmin ? "admin" : "user"}`}>
                             {ele?.isAdmin ? "Admin" : "User"}

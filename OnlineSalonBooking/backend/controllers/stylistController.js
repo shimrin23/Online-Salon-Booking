@@ -7,30 +7,24 @@ const getallstylists = async (req, res) => {
   try {
     console.log("Getting all stylists..."); // Debug log
     
-    // Get all stylist records from Stylist collection
-    const stylistRecords = await Stylist.find({}).populate("userId");
-    console.log("Stylist records found:", stylistRecords.length); // Debug log
+    // Get only APPROVED stylist records from Stylist collection
+    const stylistRecords = await Stylist.find({ 
+      applicationStatus: "approved"  // Only get approved stylists
+    }).populate("userId");
+    console.log("Approved stylist records found:", stylistRecords.length); // Debug log
     
-    // Get all users who are marked as stylists
+    // Remove this section that was adding users marked as stylists
+    // This was causing unapproved stylists to appear
+    /*
     const stylistUsers = await User.find({ isStylist: true }).select('-password');
-    console.log("Users marked as stylists:", stylistUsers.length); // Debug log
+    console.log("Users marked as stylists:", stylistUsers.length);
     
-    // Combine both sources
-    const allStylists = [];
-    
-    // Add stylist records first
-    stylistRecords.forEach(record => {
-      allStylists.push(record);
-    });
-    
-    // Add users marked as stylists who don't have stylist records
     stylistUsers.forEach(user => {
       const hasStylistRecord = stylistRecords.some(record => 
         record.userId._id.toString() === user._id.toString()
       );
       
       if (!hasStylistRecord) {
-        // Create a stylist object for users marked as stylists
         allStylists.push({
           _id: user._id,
           userId: user,
@@ -45,6 +39,10 @@ const getallstylists = async (req, res) => {
         });
       }
     });
+    */
+    
+    // Only return stylists with approved applications
+    const allStylists = stylistRecords;
     
     // Filter out current user if logged in
     if (req.userId) {
@@ -53,7 +51,7 @@ const getallstylists = async (req, res) => {
       );
     }
     
-    console.log("Total stylists to return:", allStylists.length); // Debug log
+    console.log("Total approved stylists to return:", allStylists.length); // Debug log
     return res.send(allStylists);
   } catch (error) {
     console.error("Error getting stylists:", error);

@@ -8,6 +8,8 @@ import fetchData from "../helper/apiCall";
 import { setLoading } from "../redux/reducers/rootSlice";
 import Loading from "../components/Loading";
 import "../styles/user.css";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
@@ -17,11 +19,24 @@ const Notifications = () => {
   const getAllNotif = async () => {
     try {
       dispatch(setLoading(true));
-      // Adjust the API if you want salon-specific notifications (e.g., booking updates, offers)
-      const temp = await fetchData(`/notification/getallnotifs`);
+      console.log("Fetching notifications for user...");
+
+      const temp = await fetchData(`/api/notification/getallnotifs`);
+      console.log("Notifications received:", temp);
       setNotifications(temp);
     } catch (error) {
       console.error("Failed to fetch notifications:", error);
+
+      // Add proper error handling
+      if (error.response?.status === 401) {
+        toast.error("Authentication failed. Please login again.");
+        // Optionally redirect to login
+        // navigate("/login");
+      } else if (error.response?.status === 500) {
+        toast.error("Server error. Please try again later.");
+      } else {
+        toast.error("Failed to fetch notifications. Please check your connection.");
+      }
     } finally {
       dispatch(setLoading(false));
     }

@@ -63,8 +63,14 @@ function Login() {
       // Dispatch full user info
       dispatch(setUserInfo(userData));
 
-      // Navigate to home page
-      navigate("/");
+      // ✅ NEW: Redirect based on user role
+      if (userData.isAdmin) {
+        // Admin users go directly to dashboard
+        navigate("/dashboard");
+      } else {
+        // Regular users go to home page
+        navigate("/");
+      }
     } catch (error) {
       toast.error("Login failed. Please check your credentials.");
       console.error("Login error:", error);

@@ -5,9 +5,8 @@ import React, { lazy, Suspense } from "react";
 import Loading from "./components/Loading";
 
 // Lazy-loaded pages
-const Home = lazy(() => import("./pages/Home"));
+const SmartHome = lazy(() => import("./components/SmartHome"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
-const Appointments = lazy(() => import("./pages/Appointments"));
 const Stylists = lazy(() => import("./pages/Stylists"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Notifications = lazy(() => import("./pages/Notifications"));
@@ -40,21 +39,13 @@ function App() {
             }
           />
 
+          {/* Smart Home Route - Shows admin dashboard for admins, regular home for users */}
+          <Route path="/" element={<SmartHome />} />
+          
           {/* Unprotected Routes */}
-              <Route path="/" element={<Home />} />
-              <Route path="/stylists" element={<Stylists />} />
-
-
+          <Route path="/stylists" element={<Stylists />} />
 
           {/* Protected Routes */}
-          <Route
-            path="/appointments"
-            element={
-              <Protected>
-                <Appointments />
-              </Protected>
-            }
-          />
           <Route
             path="/notifications"
             element={
@@ -64,7 +55,7 @@ function App() {
             }
           />
           <Route
-              path="/applyforstylist"
+            path="/applyforstylist"
             element={
               <Protected>
                 <ApplyStylist />
@@ -98,10 +89,10 @@ function App() {
             }
           />
           <Route
-             path="/dashboard/stylists"
+            path="/dashboard/stylists"
             element={
               <Admin>
-               <Dashboard type="stylists" />
+                <Dashboard type="stylists" />
               </Admin>
             }
           />
