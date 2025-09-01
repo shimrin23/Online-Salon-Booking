@@ -18,7 +18,7 @@ const AdminAppointments = () => {
   const getAllAppointments = async () => {
     try {
       dispatch(setLoading(true));
-      const data = await fetchData(`/appointment/getall`);
+      const data = await fetchData(`/api/appointment/getall`); // Fixed: Added /api prefix
       setAppointments(data);
       dispatch(setLoading(false));
     } catch (error) {

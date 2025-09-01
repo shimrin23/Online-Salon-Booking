@@ -163,3 +163,53 @@ td {
 .user-btn.disable-btn {
   background-color: inherit !important;
 }
+
+/* Admin Status Styles */
+.admin-status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.admin-status.admin {
+  background-color: #28a745;
+  color: white;
+}
+
+.admin-status.user {
+  background-color: #6c757d;
+  color: white;
+}
+
+/* Admin Management Button Styles */
+.promote-btn {
+  background-color: #17a2b8 !important;
+  color: white !important;
+  margin-left: 5px;
+}
+
+.promote-btn:hover {
+  background-color: #138496 !important;
+}
+
+.demote-btn {
+  background-color: #ffc107 !important;
+  color: #212529 !important;
+  margin-left: 5px;
+}
+
+.demote-btn:hover {
+  background-color: #e0a800 !important;
+}
+
+/* Adjust select column width for multiple buttons */
+.select {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  min-width: 120px;
+}

@@ -15,4 +15,6 @@ userRouter.put("/updateprofile", auth, userController.updateprofile);
 
 userRouter.delete("/delete", auth, userController.deleteuser);
 
+userRouter.put("/toggleAdmin", auth, userController.toggleAdminStatus);
+
 module.exports = userRouter;

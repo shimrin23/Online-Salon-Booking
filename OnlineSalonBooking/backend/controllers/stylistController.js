@@ -5,23 +5,56 @@ const Appointment = require("../models/appointmentModel");
 
 const getallstylists = async (req, res) => {
   try {
-    let stylists;
-    if (!req.userId) {
-      // Public: return only approved stylists
-      stylists = await Stylist.find({ 
-        isStylist: true,  // Use Stylist model's isStylist field
-        applicationStatus: "approved"  // Additional check
-      }).populate("userId");
-    } else {
-      // Exclude current logged in stylist and return only approved stylists
-      stylists = await Stylist.find({ 
-        userId: { $ne: req.userId },
-        isStylist: true,  // Use Stylist model's isStylist field
-        applicationStatus: "approved"  // Additional check
-      }).populate("userId");
+    console.log("Getting all stylists..."); // Debug log
+    
+    // Get all stylist records from Stylist collection
+    const stylistRecords = await Stylist.find({}).populate("userId");
+    console.log("Stylist records found:", stylistRecords.length); // Debug log
+    
+    // Get all users who are marked as stylists
+    const stylistUsers = await User.find({ isStylist: true }).select('-password');
+    console.log("Users marked as stylists:", stylistUsers.length); // Debug log
+    
+    // Combine both sources
+    const allStylists = [];
+    
+    // Add stylist records first
+    stylistRecords.forEach(record => {
+      allStylists.push(record);
+    });
+    
+    // Add users marked as stylists who don't have stylist records
+    stylistUsers.forEach(user => {
+      const hasStylistRecord = stylistRecords.some(record => 
+        record.userId._id.toString() === user._id.toString()
+      );
+      
+      if (!hasStylistRecord) {
+        // Create a stylist object for users marked as stylists
+        allStylists.push({
+          _id: user._id,
+          userId: user,
+          specialization: "General Stylist",
+          experience: 0,
+          fees: 0,
+          timing: "morning",
+          applicationStatus: "approved",
+          isApproved: true,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt
+        });
+      }
+    });
+    
+    // Filter out current user if logged in
+    if (req.userId) {
+      allStylists = allStylists.filter(stylist => 
+        stylist.userId._id.toString() !== req.userId.toString()
+      );
     }
-
-    return res.send(stylists);
+    
+    console.log("Total stylists to return:", allStylists.length); // Debug log
+    return res.send(allStylists);
   } catch (error) {
     console.error("Error getting stylists:", error);
     res.status(500).send("Unable to get stylists");
@@ -30,12 +63,16 @@ const getallstylists = async (req, res) => {
 
 const getpendingstylists = async (req, res) => {
   try {
-    const stylists = await Stylist.find({ isStylist: false })
-      .find({ userId: { $ne: req.userId } })
-      .populate("userId");
-
+    console.log("Getting pending stylists..."); // Debug log
+    
+    const stylists = await Stylist.find({ 
+      applicationStatus: "pending"
+    }).populate("userId");
+    
+    console.log("Pending stylists found:", stylists.length); // Debug log
     return res.send(stylists);
   } catch (error) {
+    console.error("Error getting pending stylists:", error);
     res.status(500).send("Unable to get pending stylists");
   }
 };

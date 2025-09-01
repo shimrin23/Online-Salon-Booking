@@ -17,13 +17,29 @@ const AdminStylists = () => {
 
   const getAllStylists = async () => {
     try {
+      console.log("Fetching stylists..."); // Debug log
       dispatch(setLoading(true));
-    const data = await fetchData(`/stylist/getall`);
-      setStylists(data);
+      
+      const data = await fetchData(`/api/stylist/getall`);
+      console.log("Stylists data received:", data); // Debug log
+      console.log("Data type:", typeof data); // Debug log
+      console.log("Data length:", Array.isArray(data) ? data.length : 'Not an array'); // Debug log
+      
+      if (Array.isArray(data)) {
+        setStylists(data);
+      } else {
+        console.error("Data is not an array:", data);
+        setStylists([]);
+        toast.error("Invalid data format received");
+      }
+      
       dispatch(setLoading(false));
     } catch (error) {
+      console.error("Error fetching stylists:", error); // Debug log
+      console.error("Error response:", error.response?.data); // Debug log
       dispatch(setLoading(false));
       toast.error("Failed to fetch stylist list");
+      setStylists([]);
     }
   };
 
@@ -32,7 +48,7 @@ const AdminStylists = () => {
       const confirm = window.confirm("Are you sure you want to remove this stylist?");
       if (confirm) {
         await toast.promise(
-         axios.put("/stylist/delete", 
+          axios.put("/api/stylist/delete", // Fixed: Added /api prefix
             { userId },
             {
               headers: {
@@ -64,7 +80,13 @@ const AdminStylists = () => {
       ) : (
         <section className="user-section">
           <h3 className="home-sub-heading">All Stylists</h3>
-          {stylists.length > 0 ? (
+          
+          {/* Debug info */}
+          <div style={{ marginBottom: '1rem', fontSize: '0.9rem', color: '#666' }}>
+            Total stylists: {stylists.length}
+          </div>
+          
+          {stylists && stylists.length > 0 ? (
             <div className="user-container">
               <table>
                 <thead>
@@ -82,36 +104,39 @@ const AdminStylists = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {stylists.map((ele, i) => (
-                    <tr key={ele?._id}>
-                      <td>{i + 1}</td>
-                      <td>
-                        <img
-                          className="user-table-pic"
-                          src={
-                            ele?.userId?.pic ||
-                            "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
-                          }
-                          alt={ele?.userId?.firstname}
-                        />
-                      </td>
-                      <td>{ele?.userId?.firstname}</td>
-                      <td>{ele?.userId?.lastname}</td>
-                      <td>{ele?.userId?.email}</td>
-                      <td>{ele?.userId?.mobile}</td>
-                      <td>{ele?.experience}</td>
-                      <td>{ele?.specialization}</td>
-                      <td>{ele?.fees}</td>
-                      <td className="select">
-                        <button
-                          className="btn user-btn"
-                          onClick={() => deleteStylist(ele?.userId?._id)}
-                        >
-                          Remove
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                  {stylists.map((ele, i) => {
+                    console.log("Rendering stylist:", ele); // Debug log
+                    return (
+                      <tr key={ele?._id || i}>
+                        <td>{i + 1}</td>
+                        <td>
+                          <img
+                            className="user-table-pic"
+                            src={
+                              ele?.userId?.pic ||
+                              "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"
+                            }
+                            alt={ele?.userId?.firstname || 'Stylist'}
+                          />
+                        </td>
+                        <td>{ele?.userId?.firstname || 'N/A'}</td>
+                        <td>{ele?.userId?.lastname || 'N/A'}</td>
+                        <td>{ele?.userId?.email || 'N/A'}</td>
+                        <td>{ele?.userId?.mobile || 'N/A'}</td>
+                        <td>{ele?.experience || 'N/A'}</td>
+                        <td>{ele?.specialization || 'N/A'}</td>
+                        <td>{ele?.fees || 'N/A'}</td>
+                        <td className="select">
+                          <button
+                            className="btn user-btn"
+                            onClick={() => deleteStylist(ele?.userId?._id)}
+                          >
+                            Remove
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

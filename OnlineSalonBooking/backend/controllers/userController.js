@@ -129,6 +129,46 @@ const deleteuser = async (req, res) => {
   }
 };
 
+const toggleAdminStatus = async (req, res) => {
+  try {
+    // Check if the current user is an admin
+    const currentUser = await User.findById(req.userId);
+    if (!currentUser || !currentUser.isAdmin) {
+      return res.status(403).send("Only admins can manage admin status");
+    }
+
+    const { userId, isAdmin } = req.body;
+    
+    // Prevent removing the last admin
+    if (!isAdmin) {
+      const adminCount = await User.countDocuments({ isAdmin: true });
+      if (adminCount <= 1) {
+        return res.status(400).send("Cannot remove the last admin");
+      }
+    }
+
+    // Prevent admin from demoting themselves
+    if (userId === req.userId && !isAdmin) {
+      return res.status(400).send("Cannot demote yourself from admin");
+    }
+
+    const result = await User.findByIdAndUpdate(
+      userId,
+      { isAdmin },
+      { new: true }
+    ).select("-password");
+
+    if (!result) {
+      return res.status(404).send("User not found");
+    }
+
+    return res.status(200).send("Admin status updated successfully");
+  } catch (error) {
+    console.error("Toggle admin status error:", error);
+    res.status(500).send("Unable to update admin status");
+  }
+};
+
 module.exports = {
   getuser,
   getallusers,
@@ -136,4 +176,5 @@ module.exports = {
   register,
   updateprofile,
   deleteuser,
+  toggleAdminStatus, // Add this new function
 };

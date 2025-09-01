@@ -5,15 +5,22 @@ import axios from "axios";
 
 const fetchData = async (url) => {
   try {
+    const token = localStorage.getItem("token");
+    console.log("Making API call to:", url); // Debug log
+    console.log("Token exists:", !!token); // Debug log
+    
     const { data } = await axios.get(url, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${token}`,
       },
     });
+    
+    console.log("API response:", data); // Debug log
     return data;
   } catch (error) {
     console.error("API fetch error:", error);
-    throw error; // re-throw to handle later if needed
+    console.error("Error response:", error.response?.data); // Debug log
+    throw error;
   }
 };
 

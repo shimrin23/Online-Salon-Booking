@@ -18,7 +18,7 @@ const AdminStylistApplications = () => {
   const getAllApplications = async () => {
     try {
       dispatch(setLoading(true));
-      const data = await fetchData(`/stylist/getpending`);
+      const data = await fetchData(`/api/stylist/getpending`); // Fixed: Added /api prefix
       setApplications(data);
       dispatch(setLoading(false));
     } catch (error) {
@@ -33,7 +33,7 @@ const AdminStylistApplications = () => {
       if (confirm) {
         await toast.promise(
           axios.put(
-            "/stylist/accept",
+            "/api/stylist/accept", // Fixed: Added /api prefix
             { id: userId },
             {
               headers: {
@@ -60,7 +60,7 @@ const AdminStylistApplications = () => {
       if (confirm) {
         await toast.promise(
           axios.put(
-            "/stylist/reject",
+            "/api/stylist/reject", // Fixed: Added /api prefix
             { id: userId },
             {
               headers: {
