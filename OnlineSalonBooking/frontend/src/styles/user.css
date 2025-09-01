@@ -78,13 +78,14 @@ td {
 }
 
 .accept-btn {
-  background-color: rgba(0, 128, 0, 0.528);
+  background-color: #28a745 !important; /* Solid green color */
+  color: white !important;
   font-size: 0.8rem;
   padding: 0.5rem 0.8rem;
 }
 
 .accept-btn:hover {
-  background-color: green;
+  background-color: #218838 !important; /* Darker green on hover */
 }
 
 @media (max-width: 1126px) {
@@ -155,10 +156,10 @@ td {
   background-color: #218838 !important; /* Darker green on hover */
 }
 
-/* Remove any conflicting styles */
-.user-btn.accept-btn {
+/* Remove the conflicting rule that was overriding accept-btn */
+/* .user-btn.accept-btn {
   background-color: inherit !important;
-}
+} */
 
 .user-btn.disable-btn {
   background-color: inherit !important;

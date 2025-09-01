@@ -1,7 +1,8 @@
 import React from "react";
 import AdminApplications from "../components/AdminStylistApplications";
 import AdminAppointments from "../components/AdminAppointments";
-import AdminStylists from "../components/AdminStylists"; // Renamed component
+import AdminStylists from "../components/AdminStylists";
+import AdminProfile from "../components/AdminProfile";
 import Sidebar from "../components/Sidebar";
 import Users from "../components/Users";
 
@@ -9,7 +10,6 @@ const Dashboard = (props) => {
   const { type } = props;
 
   return (
-
     <section className="layout-section">
       <div className="layout-container">
         <Sidebar />
@@ -21,6 +21,8 @@ const Dashboard = (props) => {
           <AdminApplications />
         ) : type === "appointments" ? (
           <AdminAppointments />
+        ) : type === "profile" ? (
+          <AdminProfile />
         ) : null}
       </div>
     </section>

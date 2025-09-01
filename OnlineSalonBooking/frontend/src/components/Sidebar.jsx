@@ -31,7 +31,7 @@ const Sidebar = () => {
     {
       name: "Stylists",
       path: "/dashboard/stylists",
-      icon: <FaUserTie />, // changed icon to a generic user icon for stylist
+      icon: <FaUserTie />,
     },
     {
       name: "Appointments",
@@ -45,7 +45,7 @@ const Sidebar = () => {
     },
     {
       name: "Profile",
-      path: "/profile",
+      path: "/dashboard/profile",
       icon: <FaUser />,
     },
   ];

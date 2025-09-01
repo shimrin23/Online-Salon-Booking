@@ -17,7 +17,7 @@ const Users = () => {
   const getAllUsers = async () => {
     try {
       dispatch(setLoading(true));
-      const temp = await fetchData(`/api/user/getall`); // Fixed: Added /api prefix
+      const temp = await fetchData(`/api/users/getall`); // Fixed: Changed from /api/user/getall to /api/users/getall
       setUsers(temp);
     } catch (error) {
       toast.error("Failed to fetch users");
@@ -64,7 +64,7 @@ const Users = () => {
       if (confirm) {
         await toast.promise(
           axios.put(
-            "/api/users/toggleAdmin",
+            "/api/users/toggleAdmin", // Fixed: This is already correct
             { userId, isAdmin: !currentAdminStatus },
             {
               headers: {

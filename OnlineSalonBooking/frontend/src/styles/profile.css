@@ -15,10 +15,44 @@
   width: 100%;
 }
 
+/* Profile Picture Section Styles */
+.profile-pic-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
 .profile-pic {
   border-radius: 50%;
-  width: 70px;
-  height: 70px;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border: 3px solid var(--dark-blue);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-pic-input {
+  display: none; /* Hide the default file input */
+}
+
+.profile-pic-label {
+  background-color: var(--dark-blue);
+  color: var(--white);
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.profile-pic-label:hover {
+  background-color: var(--darker-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .gohome {
@@ -93,9 +127,8 @@ select:focus {
     width: 70%;
   }
   .profile-pic {
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
+    width: 100px;
+    height: 100px;
   }
 }
 
@@ -106,5 +139,10 @@ select:focus {
 
   .form-same-row {
     flex-direction: column;
+  }
+  
+  .profile-pic {
+    width: 80px;
+    height: 80px;
   }
 }

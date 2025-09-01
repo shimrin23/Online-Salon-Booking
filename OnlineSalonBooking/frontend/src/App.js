@@ -121,6 +121,14 @@ function App() {
               </Admin>
             }
           />
+          <Route
+            path="/dashboard/profile"
+            element={
+              <Admin>
+                <Dashboard type="profile" />
+              </Admin>
+            }
+          />
 
           {/* Catch-all route */}
           <Route path="*" element={<Error />} />
