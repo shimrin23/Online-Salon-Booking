@@ -85,7 +85,7 @@ function App() {
             path="/dashboard"
             element={
               <Admin>
-                <Navigate to="/dashboard/users" replace />
+                <Dashboard type="home" />
               </Admin>
             }
           />

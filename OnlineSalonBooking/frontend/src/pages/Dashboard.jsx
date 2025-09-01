@@ -3,6 +3,7 @@ import AdminApplications from "../components/AdminStylistApplications";
 import AdminAppointments from "../components/AdminAppointments";
 import AdminStylists from "../components/AdminStylists";
 import AdminProfile from "../components/AdminProfile";
+import AdminHome from "../components/AdminHome";
 import Sidebar from "../components/Sidebar";
 import Users from "../components/Users";
 
@@ -13,7 +14,9 @@ const Dashboard = (props) => {
     <section className="layout-section">
       <div className="layout-container">
         <Sidebar />
-        {type === "users" ? (
+        {type === "home" ? (
+          <AdminHome />
+        ) : type === "users" ? (
           <Users />
         ) : type === "stylists" ? (
           <AdminStylists />
@@ -23,7 +26,9 @@ const Dashboard = (props) => {
           <AdminAppointments />
         ) : type === "profile" ? (
           <AdminProfile />
-        ) : null}
+        ) : (
+          <AdminHome />
+        )}
       </div>
     </section>
   );

@@ -20,7 +20,7 @@ const Sidebar = () => {
   const sidebar = [
     {
       name: "Home",
-      path: "/",
+      path: "/dashboard",
       icon: <FaHome />,
     },
     {
