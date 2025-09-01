@@ -26,10 +26,6 @@ const schema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    isStylist: {
-      type: Boolean,
-      default: false,
-    },
     age: {
       type: Number,
       default: "",

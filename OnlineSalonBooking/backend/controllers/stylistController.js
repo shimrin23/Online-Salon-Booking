@@ -7,12 +7,18 @@ const getallstylists = async (req, res) => {
   try {
     let stylists;
     if (!req.userId) {
-      // Public: return all approved stylists AND pending applications
-      stylists = await Stylist.find({}).populate("userId");
+      // Public: return only approved stylists
+      stylists = await Stylist.find({ 
+        isStylist: true,  // Use Stylist model's isStylist field
+        applicationStatus: "approved"  // Additional check
+      }).populate("userId");
     } else {
-      // Exclude current logged in stylist (if any)
-      stylists = await Stylist.find({ userId: { $ne: req.userId } })
-        .populate("userId");
+      // Exclude current logged in stylist and return only approved stylists
+      stylists = await Stylist.find({ 
+        userId: { $ne: req.userId },
+        isStylist: true,  // Use Stylist model's isStylist field
+        applicationStatus: "approved"  // Additional check
+      }).populate("userId");
     }
 
     return res.send(stylists);
@@ -81,14 +87,19 @@ const applyforstylist = async (req, res) => {
 
 const acceptstylist = async (req, res) => {
   try {
+    // Update User model's isStylist field
     await User.findOneAndUpdate(
       { _id: req.body.id },
       { isStylist: true, status: "accepted" }
     );
 
+    // Update Stylist model's isStylist field
     await Stylist.findOneAndUpdate(
       { userId: req.body.id },
-      { isStylist: true }
+      { 
+        isStylist: true,
+        applicationStatus: "approved"
+      }
     );
 
     const notification = new Notification({

@@ -116,3 +116,50 @@ td {
     width: 50vw;
   }
 }
+
+.status-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.status-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.status-text {
+  font-weight: 500;
+  color: var(--bold-text-color);
+}
+
+/* Button color styles for appointments */
+
+.pending-btn {
+  background-color: var(--dark-blue) !important; /* Blue color for pending */
+  color: white !important;
+}
+
+.pending-btn:hover {
+  background-color: var(--darker-blue) !important; /* Darker blue on hover */
+}
+
+.completed-btn {
+  background-color: #28a745 !important; /* Green color for completed */
+  color: white !important;
+}
+
+.completed-btn:hover {
+  background-color: #218838 !important; /* Darker green on hover */
+}
+
+/* Remove any conflicting styles */
+.user-btn.accept-btn {
+  background-color: inherit !important;
+}
+
+.user-btn.disable-btn {
+  background-color: inherit !important;
+}

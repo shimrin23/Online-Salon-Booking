@@ -34,7 +34,7 @@ const AdminAppointments = () => {
   const markAsComplete = async (appointment) => {
     try {
       await toast.promise(
-        axios.put("/appointment/complete",
+        axios.put("/api/appointment/complete",  // Fixed: Added /api prefix
           {
             appointid: appointment?._id,
             stylistId: appointment?.stylistId._id,
@@ -48,7 +48,7 @@ const AdminAppointments = () => {
         ),
         {
           success: "Appointment marked as completed",
-          error: "Unable to complete appointment",
+          error: "Failed to update appointment status",  // Fixed: Changed error message
           loading: "Completing appointment...",
         }
       );

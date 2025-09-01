@@ -23,10 +23,17 @@ const schema = mongoose.Schema(
       type: String,
       default: "morning",
     },
-    isStylist: {
+    // Rename this to be more clear
+    isApproved: {
       type: Boolean,
       default: false,
     },
+    // Add application status
+    applicationStatus: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending"
+    }
   },
   {
     timestamps: true,

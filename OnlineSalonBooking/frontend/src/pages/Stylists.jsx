@@ -24,7 +24,12 @@ const Stylists = () => {
       console.log("Stylists data:", response.data);
       
       if (Array.isArray(response.data)) {
-        setStylists(response.data);
+        // Filter out any stylists without proper user data
+        const validStylists = response.data.filter(stylist => 
+          stylist.userId && stylist.userId.firstname && stylist.userId.lastname
+        );
+        console.log("Valid stylists:", validStylists);
+        setStylists(validStylists);
       } else {
         console.error("Unexpected data format:", response.data);
         setStylists([]);
@@ -33,14 +38,6 @@ const Stylists = () => {
       console.error("Error fetching stylists:", error);
       console.error("Error details:", error.response?.data);
       console.error("Error status:", error.response?.status);
-      
-      // Try the test endpoint to debug
-      try {
-        const testResponse = await axios.get("/api/stylist/test");
-        console.log("Test endpoint response:", testResponse.data);
-      } catch (testError) {
-        console.error("Test endpoint also failed:", testError);
-      }
       
       setStylists([]);
     } finally {
