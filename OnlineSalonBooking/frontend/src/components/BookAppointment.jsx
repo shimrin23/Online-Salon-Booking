@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles/bookappointment.css";
+import "../styles/register.css"; // Add this import to get the missing styles
 import axios from "axios";
 import toast from "react-hot-toast";
 import { IoMdClose } from "react-icons/io";
@@ -37,7 +38,7 @@ const BookAppointment = ({ setModalOpen, ele }) => {
       }
 
       await toast.promise(
-        axios.post("/appointment/book",
+        axios.post("/api/appointment/book",
           {
             stylistId: ele?.userId?._id,
             date: formDetails.date,
