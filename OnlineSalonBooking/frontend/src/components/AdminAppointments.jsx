@@ -18,7 +18,6 @@ const AdminAppointments = () => {
       const temp = await fetchData(
         `/api/appointment/getall`
       );
-      console.log("Raw appointments data:", temp); // Debug log
       setAppointments(temp);
     } catch (error) {
       toast.error("Failed to fetch appointments");
@@ -31,12 +30,8 @@ const AdminAppointments = () => {
 
   const markComplete = async (ele) => {
     try {
-      console.log("=== MARK COMPLETE START ===");
-      console.log("Appointment data:", ele);
-      
       // Toggle between Completed and Pending
       const newStatus = ele.status === "Completed" ? "Pending" : "Completed";
-      console.log("New status will be:", newStatus);
 
       const requestData = {
         appointid: ele._id,
@@ -44,10 +39,6 @@ const AdminAppointments = () => {
         stylistName: `${ele?.stylistId?.userId?.firstname || ''} ${ele?.stylistId?.userId?.lastname || ''}`.trim(),
         status: newStatus
       };
-
-      console.log("Request data being sent:", requestData);
-      console.log("API endpoint:", "/api/appointment/complete");
-      console.log("Request method: PUT");
 
       // Update local state IMMEDIATELY for instant UI update
       setAppointments(prevAppointments => 
@@ -57,8 +48,6 @@ const AdminAppointments = () => {
             : appointment
         )
       );
-
-      console.log("Local state updated, making API call...");
 
       // Make API call and handle response
       const response = await axios.put(
@@ -70,23 +59,11 @@ const AdminAppointments = () => {
           },
         }
       );
-
-      console.log("API response received:", response);
-      console.log("=== MARK COMPLETE SUCCESS ===");
       
       // Only show success message after API call succeeds
       toast.success(`Appointment marked as ${newStatus.toLowerCase()}`);
       
     } catch (error) {
-      console.error("=== MARK COMPLETE ERROR ===");
-      console.error("Full error object:", error);
-      console.error("Error response:", error.response);
-      console.error("Error message:", error.message);
-      console.error("Error status:", error.response?.status);
-      console.error("Error data:", error.response?.data);
-      console.error("Error URL:", error.config?.url);
-      console.error("Error method:", error.config?.method);
-      
       // If API call fails, revert the local state
       setAppointments(prevAppointments => 
         prevAppointments.map(appointment => 
