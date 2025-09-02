@@ -47,9 +47,6 @@ const Navbar = () => {
           {token && !user.isAdmin && (
             <>
               <li>
-                <NavLink to={"/notifications"}>Notifications</NavLink>
-              </li>
-              <li>
                 <NavLink to={"/applyforstylist"}>Apply for Stylist</NavLink>
               </li>
               {/* Contact Us link removed */}

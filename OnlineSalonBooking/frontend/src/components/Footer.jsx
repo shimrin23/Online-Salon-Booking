@@ -18,9 +18,6 @@ const Footer = () => {
               <NavLink to={"/stylists"}>Stylists</NavLink>
             </li>
             <li>
-              <NavLink to={"/notifications"}>Notifications</NavLink>
-            </li>
-            <li>
               <HashLink to={"/#contact"}>Contact Us</HashLink>
             </li>
             <li>

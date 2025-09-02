@@ -9,7 +9,6 @@ const SmartHome = lazy(() => import("./components/SmartHome"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Stylists = lazy(() => import("./pages/Stylists"));
 const Profile = lazy(() => import("./pages/Profile"));
-const Notifications = lazy(() => import("./pages/Notifications"));
 const ApplyStylist = lazy(() => import("./pages/ApplyStylist"));
 const Register = lazy(() => import("./pages/Register"));
 const Login = lazy(() => import("./pages/Login"));
@@ -46,14 +45,6 @@ function App() {
           <Route path="/stylists" element={<Stylists />} />
 
           {/* Protected Routes */}
-          <Route
-            path="/notifications"
-            element={
-              <Protected>
-                <Notifications />
-              </Protected>
-            }
-          />
           <Route
             path="/applyforstylist"
             element={
