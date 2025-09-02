@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import Loading from "./Loading";
 import { setLoading } from "../redux/reducers/rootSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Empty from "./Empty";
@@ -13,12 +12,10 @@ import "../styles/user.css";
 const AdminStylists = () => {
   const [stylists, setStylists] = useState([]);
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.root);
 
   const getAllStylists = async () => {
     try {
       console.log("Fetching stylists..."); // Debug log
-      dispatch(setLoading(true));
       
       const data = await fetchData(`/api/stylist/getall`);
       console.log("Stylists data received:", data); // Debug log
@@ -33,12 +30,9 @@ const AdminStylists = () => {
         toast.error("Invalid data format received");
       }
       
-      dispatch(setLoading(false));
     } catch (error) {
       console.error("Error fetching stylists:", error); // Debug log
       console.error("Error response:", error.response?.data); // Debug log
-      dispatch(setLoading(false));
-      toast.error("Failed to fetch stylist list");
       setStylists([]);
     }
   };
@@ -75,10 +69,7 @@ const AdminStylists = () => {
 
   return (
     <>
-      {loading ? (
-        <Loading />
-      ) : (
-        <section className="user-section">
+      <section className="user-section">
           <h3 className="home-sub-heading">All Stylists</h3>
           
           {/* Debug info */}
@@ -144,7 +135,6 @@ const AdminStylists = () => {
             <Empty />
           )}
         </section>
-      )}
     </>
   );
 };

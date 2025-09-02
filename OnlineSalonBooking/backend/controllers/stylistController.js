@@ -5,53 +5,18 @@ const Appointment = require("../models/appointmentModel");
 
 const getallstylists = async (req, res) => {
   try {
-    console.log("Getting all stylists..."); // Debug log
-    
-    // Get only APPROVED stylist records from Stylist collection
     const stylistRecords = await Stylist.find({ 
-      applicationStatus: "approved"  // Only get approved stylists
+      applicationStatus: "approved"
     }).populate("userId");
-    console.log("Approved stylist records found:", stylistRecords.length); // Debug log
     
-    // Remove this section that was adding users marked as stylists
-    // This was causing unapproved stylists to appear
-    /*
-    const stylistUsers = await User.find({ isStylist: true }).select('-password');
-    console.log("Users marked as stylists:", stylistUsers.length);
-    
-    stylistUsers.forEach(user => {
-      const hasStylistRecord = stylistRecords.some(record => 
-        record.userId._id.toString() === user._id.toString()
-      );
-      
-      if (!hasStylistRecord) {
-        allStylists.push({
-          _id: user._id,
-          userId: user,
-          specialization: "General Stylist",
-          experience: 0,
-          fees: 0,
-          timing: "morning",
-          applicationStatus: "approved",
-          isApproved: true,
-          createdAt: user.createdAt,
-          updatedAt: user.updatedAt
-        });
-      }
-    });
-    */
-    
-    // Only return stylists with approved applications
     const allStylists = stylistRecords;
     
-    // Filter out current user if logged in
     if (req.userId) {
       allStylists = allStylists.filter(stylist => 
         stylist.userId._id.toString() !== req.userId.toString()
       );
     }
     
-    console.log("Total approved stylists to return:", allStylists.length); // Debug log
     return res.send(allStylists);
   } catch (error) {
     console.error("Error getting stylists:", error);

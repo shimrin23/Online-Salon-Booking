@@ -6,8 +6,9 @@ import axios from "axios";
 const fetchData = async (url) => {
   try {
     const token = localStorage.getItem("token");
-    console.log("Making API call to:", url); // Debug log
-    console.log("Token exists:", !!token); // Debug log
+    // Remove these console.log statements
+    // console.log("Making API call to:", url);
+    // console.log("Token exists:", !!token);
     
     const { data } = await axios.get(url, {
       headers: {
@@ -15,11 +16,11 @@ const fetchData = async (url) => {
       },
     });
     
-    console.log("API response:", data); // Debug log
+    // console.log("API response:", data); // Remove this too
     return data;
   } catch (error) {
     console.error("API fetch error:", error);
-    console.error("Error response:", error.response?.data); // Debug log
+    // console.error("Error response:", error.response?.data); // Remove this
     throw error;
   }
 };

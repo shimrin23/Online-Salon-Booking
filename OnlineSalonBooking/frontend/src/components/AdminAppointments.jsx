@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import Loading from "./Loading";
 import { setLoading } from "../redux/reducers/rootSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Empty from "./Empty";
@@ -13,20 +12,16 @@ import "../styles/user.css";
 const AdminAppointments = () => {
   const [appointments, setAppointments] = useState([]);
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.root);
 
   const getAllAppointments = async () => {
     try {
-      dispatch(setLoading(true));
       const temp = await fetchData(
         `/api/appointment/getall`
       );
       console.log("Raw appointments data:", temp); // Debug log
       setAppointments(temp);
-      dispatch(setLoading(false));
     } catch (error) {
       toast.error("Failed to fetch appointments");
-      dispatch(setLoading(false));
     }
   };
 
@@ -112,66 +107,62 @@ const AdminAppointments = () => {
 
   return (
     <>
-      {loading ? (
-        <Loading />
-      ) : (
-        <section className="user-section">
-          <h3 className="home-sub-heading">Your Booked Appointments</h3>
-          
-          {appointments.length > 0 ? (
-            <div className="appointments">
-              <table>
-                <thead>
-                  <tr>
-                    <th>S.No</th>
-                    <th>Stylist</th>
-                    <th>Client</th>
-                    <th>Appointment Date</th>
-                    <th>Appointment Time</th>
-                    <th>Booking Date</th>
-                    <th>Booking Time</th>
-                    <th>Status</th>
-                    <th>Action</th>
+      <section className="user-section">
+        <h3 className="home-sub-heading">Your Booked Appointments</h3>
+        
+        {appointments.length > 0 ? (
+          <div className="appointments">
+            <table>
+              <thead>
+                <tr>
+                  <th>S.No</th>
+                  <th>Stylist</th>
+                  <th>Client</th>
+                  <th>Appointment Date</th>
+                  <th>Appointment Time</th>
+                  <th>Booking Date</th>
+                  <th>Booking Time</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {appointments.map((ele, i) => (
+                  <tr key={ele?._id}>
+                    <td>{i + 1}</td>
+                    <td>
+                      {ele?.stylistId?.userId?.firstname && ele?.stylistId?.userId?.lastname 
+                        ? `${ele.stylistId.userId.firstname} ${ele.stylistId.userId.lastname}`
+                        : "Stylist not found"
+                      }
+                    </td>
+                    <td>
+                      {ele?.userId?.firstname + " " + ele?.userId?.lastname}
+                    </td>
+                    <td>{ele?.date}</td>
+                    <td>{ele?.time}</td>
+                    <td>{ele?.createdAt?.split("T")[0]}</td>
+                    <td>{ele?.updatedAt?.split("T")[1]?.split(".")[0]}</td>
+                    <td>{ele?.status}</td>
+                    <td>
+                      <button
+                        className={`btn user-btn ${
+                          ele?.status === "Completed" ? "completed-btn" : "pending-btn"
+                        }`}
+                        onClick={() => markComplete(ele)}
+                      >
+                        {ele?.status === "Completed" ? "Completed" : "Mark Complete"}
+                      </button>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {appointments.map((ele, i) => (
-                    <tr key={ele?._id}>
-                      <td>{i + 1}</td>
-                      <td>
-                        {ele?.stylistId?.userId?.firstname && ele?.stylistId?.userId?.lastname 
-                          ? `${ele.stylistId.userId.firstname} ${ele.stylistId.userId.lastname}`
-                          : "Stylist not found"
-                        }
-                      </td>
-                      <td>
-                        {ele?.userId?.firstname + " " + ele?.userId?.lastname}
-                      </td>
-                      <td>{ele?.date}</td>
-                      <td>{ele?.time}</td>
-                      <td>{ele?.createdAt?.split("T")[0]}</td>
-                      <td>{ele?.updatedAt?.split("T")[1]?.split(".")[0]}</td>
-                      <td>{ele?.status}</td>
-                      <td>
-                        <button
-                          className={`btn user-btn ${
-                            ele?.status === "Completed" ? "completed-btn" : "pending-btn"
-                          }`}
-                          onClick={() => markComplete(ele)}
-                        >
-                          {ele?.status === "Completed" ? "Completed" : "Mark Complete"}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <Empty />
-          )}
-        </section>
-      )}
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <Empty />
+        )}
+      </section>
     </>
   );
 };

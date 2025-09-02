@@ -7,18 +7,22 @@ const Hero = () => {
     <section className="hero">
       <div className="hero-content">
         <h1>
-          Look Your Best, <br />
-          Feel Amazing
+          Elegance Meets <br />
+          <span style={{ color: 'var(--accent-color)' }}>Excellence</span>
         </h1>
         <p>
-          Experience top-notch salon services tailored just for you. Book your
-          appointment today and step into style!
+          Discover the art of beauty at GlamourGlow. Our master stylists create 
+          timeless looks that reflect your unique style. Experience luxury, 
+          precision, and transformation in every visit.
         </p>
+        <button className="btn" onClick={() => window.location.href = '/stylists'}>
+          Book Your Session
+        </button>
       </div>
       <div className="hero-img">
         <img
           src={image}
-          alt="Salon Hero"
+          alt="Luxury Salon Experience"
         />
       </div>
     </section>

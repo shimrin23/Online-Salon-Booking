@@ -8,7 +8,7 @@ import {
   FaEnvelope,
 } from "react-icons/fa";
 import "../styles/sidebar.css";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { MdLogout } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "../redux/reducers/rootSlice";
@@ -16,6 +16,7 @@ import { setUserInfo } from "../redux/reducers/rootSlice";
 const Sidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const sidebar = [
     {
@@ -60,17 +61,31 @@ const Sidebar = () => {
     <>
       <section className="sidebar-section flex-center">
         <div className="sidebar-container">
+          {/* Brand Section */}
+          <div className="sidebar-brand">
+            <h2>GlamourGlow</h2>
+            <p>Admin Dashboard</p>
+          </div>
+
+          {/* Navigation Menu */}
           <ul>
             {sidebar.map((ele, i) => (
-              <li key={i}>
+              <li key={i} className={location.pathname === ele.path ? 'active' : ''}>
                 {ele.icon}
-                <NavLink to={ele.path}>{ele.name}</NavLink>
+                <NavLink 
+                  to={ele.path}
+                  className={location.pathname === ele.path ? 'active' : ''}
+                >
+                  {ele.name}
+                </NavLink>
               </li>
             ))}
           </ul>
-          <div className="logout-container">
+
+          {/* Logout Section */}
+          <div className="logout-container" onClick={logoutFunc}>
             <MdLogout />
-            <p onClick={logoutFunc}>Logout</p>
+            <p>Logout</p>
           </div>
         </div>
       </section>

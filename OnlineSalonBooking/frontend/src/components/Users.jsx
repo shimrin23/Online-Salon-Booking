@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import Loading from "./Loading";
 import { setLoading } from "../redux/reducers/rootSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Empty from "./Empty";
@@ -12,18 +11,16 @@ import fetchData from "../helper/apiCall";
 const Users = () => {
   const [users, setUsers] = useState([]);
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.root);
 
   const getAllUsers = async () => {
     try {
-      dispatch(setLoading(true));
       const temp = await fetchData(`/api/users/getall`); // Fixed: Changed from /api/user/getall to /api/users/getall
       setUsers(temp);
     } catch (error) {
       toast.error("Failed to fetch users");
       console.error(error);
     } finally {
-      dispatch(setLoading(false));
+      // dispatch(setLoading(false)); // Removed loading effect
     }
   };
 
@@ -54,9 +51,11 @@ const Users = () => {
 
   // Add new function for admin management
   const toggleAdminStatus = async (userId, currentAdminStatus) => {
+    // Move these variables outside the try block so they're accessible in catch
+    const isPromoting = !currentAdminStatus;
+    const actionText = isPromoting ? "promote" : "demote";
+    
     try {
-      const isPromoting = !currentAdminStatus;
-      const actionText = isPromoting ? "promote" : "demote";
       const confirmMessage = `Are you sure you want to ${actionText} this user ${isPromoting ? "to admin" : "from admin"}?`;
       
       const confirm = window.confirm(confirmMessage);
@@ -64,7 +63,7 @@ const Users = () => {
       if (confirm) {
         await toast.promise(
           axios.put(
-            "/api/users/toggleAdmin", // Fixed: This is already correct
+            "/api/users/toggleAdmin",
             { userId, isAdmin: !currentAdminStatus },
             {
               headers: {
@@ -81,8 +80,6 @@ const Users = () => {
         getAllUsers(); // Refresh the user list
       }
     } catch (error) {
-      const isPromoting = !currentAdminStatus;
-      const actionText = isPromoting ? "promote" : "demote";
       toast.error(`Error ${actionText}ing user`);
       console.error(error);
     }
@@ -94,9 +91,9 @@ const Users = () => {
 
   return (
     <>
-      {loading ? (
+      {/* {loading ? ( // Removed loading effect
         <Loading />
-      ) : (
+      ) : ( */}
         <section className="user-section">
           <h3 className="home-sub-heading">All Users</h3>
           {users.length > 0 ? (
@@ -165,7 +162,7 @@ const Users = () => {
             <Empty />
           )}
         </section>
-      )}
+      {/* )} */}
     </>
   );
 };

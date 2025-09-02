@@ -20,7 +20,7 @@ const HomeCircles = () => {
           )}
         </CountUp>
         <span className="circle-name">
-          Happy
+          Satisfied
           <br />
           Clients
         </span>
@@ -40,7 +40,7 @@ const HomeCircles = () => {
           )}
         </CountUp>
         <span className="circle-name">
-          Professional
+          Expert
           <br />
           Stylists
         </span>
@@ -60,9 +60,9 @@ const HomeCircles = () => {
           )}
         </CountUp>
         <span className="circle-name">
-          Specialist
+          Years of
           <br />
-          Stylists
+          Excellence
         </span>
       </div>
     </section>

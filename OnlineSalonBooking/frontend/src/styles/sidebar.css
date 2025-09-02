@@ -1,55 +1,183 @@
 @import url(app.css);
 
 .sidebar-section {
-  background: linear-gradient(
-    0deg,
-    rgba(0, 119, 255, 1) 0%,
-    rgba(64, 164, 255, 1) 100%
-  );
+  background: linear-gradient(180deg, var(--primary-color) 0%, var(--secondary-color) 100%);
   width: 18vw;
   height: 100vh;
-  box-shadow: 0 0 10px 0 var(--darker-blue);
+  box-shadow: var(--shadow-medium);
   position: sticky;
   top: 0%;
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
 }
 
 .sidebar-container {
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   height: 100%;
+  padding: 2rem 0;
+  position: relative;
+  z-index: 1;
 }
 
+/* Logo/Brand Section */
+.sidebar-brand {
+  text-align: center;
+  padding: 1rem 1.5rem 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 2rem;
+}
+
+.sidebar-brand h2 {
+  color: var(--background-primary);
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-brand p {
+  color: var(--background-secondary);
+  font-size: 0.9rem;
+  margin: 0.5rem 0 0 0;
+  opacity: 0.8;
+}
+
+/* Navigation Menu */
 .sidebar-container > ul {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 0.5rem;
+  padding: 0 1rem;
 }
 
-.sidebar-container ul > li,
-.logout-container {
-  font-size: 1.2rem;
-  color: var(--white);
+.sidebar-container ul > li {
+  font-size: 1rem;
+  color: var(--background-primary);
   display: flex;
   gap: 1rem;
   align-items: center;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
 }
 
-.sidebar-container a,
+.sidebar-container ul > li::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.sidebar-container ul > li:hover::before {
+  left: 100%;
+}
+
+.sidebar-container ul > li:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(8px);
+  box-shadow: var(--shadow-light);
+}
+
+.sidebar-container ul > li.active {
+  background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
+  box-shadow: var(--shadow-medium);
+  transform: translateX(8px);
+}
+
+.sidebar-container ul > li svg {
+  font-size: 1.2rem;
+  min-width: 20px;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-container ul > li:hover svg {
+  transform: scale(1.1);
+}
+
+.sidebar-container a {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+}
+
+.sidebar-container a:hover {
+  color: var(--background-primary);
+}
+
+.sidebar-container a.active {
+  color: var(--background-primary);
+  font-weight: 600;
+}
+
+/* Logout Section */
+.logout-container {
+  font-size: 1rem;
+  color: var(--background-primary);
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  margin: 0 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logout-container:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-light);
+}
+
+.logout-container svg {
+  font-size: 1.3rem;
+  transition: transform 0.3s ease;
+}
+
+.logout-container:hover svg {
+  transform: rotate(15deg);
+}
+
 .logout-container p {
-  color: var(--white);
+  color: inherit;
   cursor: pointer;
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
-.sidebar-container a:hover,
-.logout-container p:hover {
-  color: var(--light-text-color);
-  cursor: pointer;
-}
-
+/* Responsive Design */
 @media (max-width: 1126px) {
   .sidebar-section {
     width: 22vw;
+  }
+  
+  .sidebar-brand h2 {
+    font-size: 1.6rem;
   }
 }
 
@@ -57,11 +185,28 @@
   .sidebar-section {
     width: 25vw;
   }
+  
+  .sidebar-container {
+    padding: 1.5rem 0;
+  }
+  
+  .sidebar-brand {
+    padding: 1rem 1rem 1.5rem;
+  }
 }
 
 @media (max-width: 700px) {
   .sidebar-section {
     width: 30vw;
+  }
+  
+  .sidebar-container ul > li {
+    padding: 0.7rem 0.8rem;
+    font-size: 0.9rem;
+  }
+  
+  .sidebar-brand h2 {
+    font-size: 1.4rem;
   }
 }
 
@@ -69,10 +214,27 @@
   .sidebar-section {
     width: 40vw;
   }
+  
+  .sidebar-container {
+    padding: 1rem 0;
+  }
+  
+  .sidebar-brand {
+    padding: 0.8rem 0.8rem 1rem;
+  }
 }
 
 @media (max-width: 426px) {
   .sidebar-section {
     width: 45vw;
+  }
+  
+  .sidebar-container ul > li {
+    padding: 0.6rem 0.6rem;
+    font-size: 0.8rem;
+  }
+  
+  .sidebar-brand h2 {
+    font-size: 1.2rem;
   }
 }
