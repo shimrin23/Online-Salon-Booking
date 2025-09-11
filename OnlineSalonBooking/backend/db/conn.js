@@ -17,5 +17,5 @@ mongoose
     console.error("MongoDB connection error:", error);
   });
 
-// Export mongoose (so you can use it in other files if needed)
+
 module.exports = mongoose;

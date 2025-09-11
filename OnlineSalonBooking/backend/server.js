@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config();  // Loads .env variables
+require("dotenv").config(); 
 require("./db/conn");
 const userRouter = require("./routes/userRoutes");
 const stylistRouter = require("./routes/stylistRoutes");
@@ -13,8 +13,8 @@ const port = process.env.PORT || 5001;
 app.use(cors());
 app.use(express.json());
 
-// Corrected routes
-app.use("/api/users", userRouter); // must match frontend endpoints
+
+app.use("/api/users", userRouter); 
 app.use("/api/stylist", stylistRouter);
 app.use("/api/appointment", appointRouter);
 
