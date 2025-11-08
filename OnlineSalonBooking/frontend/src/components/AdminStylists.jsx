@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { setLoading } from "../redux/reducers/rootSlice";
-import { useDispatch, useSelector } from "react-redux";
+// Removed unused redux imports
 import Empty from "./Empty";
 import fetchData from "../helper/apiCall";
 import "../styles/user.css";
@@ -11,7 +10,7 @@ import "../styles/user.css";
 
 const AdminStylists = () => {
   const [stylists, setStylists] = useState([]);
-  const dispatch = useDispatch();
+  // redux dispatch removed (unused)
 
   const getAllStylists = async () => {
     try {

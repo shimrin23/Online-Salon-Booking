@@ -3,19 +3,19 @@ import StylistCard from "../components/StylistCard";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import "../styles/stylists.css"; 
-import fetchData from "../helper/apiCall";
 import Loading from "../components/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../redux/reducers/rootSlice";
 import Empty from "../components/Empty";
 import axios from "axios";
+import { useCallback } from "react";
 
 const Stylists = () => {
   const [stylists, setStylists] = useState([]);
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.root);
 
-  const fetchAllStylists = async () => {
+  const fetchAllStylists = useCallback(async () => {
     dispatch(setLoading(true));
     try {
       console.log("Fetching stylists from:", "/api/stylist/getall");
@@ -43,11 +43,11 @@ const Stylists = () => {
     } finally {
       dispatch(setLoading(false));
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     fetchAllStylists();
-  }, []);
+  }, [fetchAllStylists]);
 
   return (
     <>

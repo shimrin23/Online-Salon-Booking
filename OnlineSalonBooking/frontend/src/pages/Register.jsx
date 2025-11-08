@@ -3,13 +3,13 @@ import { NavLink, useNavigate } from "react-router-dom";
 import "../styles/register.css";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+// Removed unused Link import
 import Navbar from "../components/Navbar"; // ✅ Add this import
 
 // API base URL is set in apiCall.js
 
 function Register() {
-  const [loading, setLoading] = useState(false);
+  // removed unused loading state
   const [formDetails, setFormDetails] = useState({
     firstname: "",
     lastname: "",

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { setLoading } from "../redux/reducers/rootSlice";
-import { useDispatch, useSelector } from "react-redux";
+// Removed unused redux imports
 import Empty from "./Empty";
 import fetchData from "../helper/apiCall";
 import "../styles/user.css";
@@ -11,7 +10,7 @@ import "../styles/user.css";
 
 const AdminAppointments = () => {
   const [appointments, setAppointments] = useState([]);
-  const dispatch = useDispatch();
+  // redux dispatch removed (unused)
 
   const getAllAppointments = async () => {
     try {
@@ -50,7 +49,7 @@ const AdminAppointments = () => {
       );
 
       // Make API call and handle response
-      const response = await axios.put(
+  await axios.put(
         "/api/appointment/complete",
         requestData,
         {
