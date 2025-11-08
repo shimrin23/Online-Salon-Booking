@@ -11,8 +11,8 @@ const Navbar = () => {
   const [iconActive, setIconActive] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [token] = useState(localStorage.getItem("token") || "");
-  const [user] = useState(
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [user, setUser] = useState(
     localStorage.getItem("token")
       ? jwt_decode(localStorage.getItem("token"))
       : ""

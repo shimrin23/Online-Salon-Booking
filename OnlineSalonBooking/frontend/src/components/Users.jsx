@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-// Removed unused redux imports
+import { setLoading } from "../redux/reducers/rootSlice";
+import { useDispatch, useSelector } from "react-redux";
 import Empty from "./Empty";
 import fetchData from "../helper/apiCall";
 
@@ -9,7 +10,7 @@ import fetchData from "../helper/apiCall";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
-  // redux dispatch removed (unused)
+  const dispatch = useDispatch();
 
   const getAllUsers = async () => {
     try {

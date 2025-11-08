@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/profile.css";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -30,7 +30,7 @@ function AdminProfile() {
   });
 
   // Fetch user profile details on mount
-  const getUser = useCallback(async () => {
+  const getUser = async () => {
     try {
       dispatch(setLoading(true));
       const temp = await fetchData(`/api/users/getuser/${userId}`);
@@ -48,11 +48,11 @@ function AdminProfile() {
       toast.error("Failed to load profile.");
       console.error(error);
     }
-  }, [userId, dispatch]);
+  };
 
   useEffect(() => {
     getUser();
-  }, [getUser]);
+  }, []);
 
   // Handle file input change
   const onUpload = async (e) => {

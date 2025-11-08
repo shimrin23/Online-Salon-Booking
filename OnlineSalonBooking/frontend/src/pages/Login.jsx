@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { setUserInfo } from "../redux/reducers/rootSlice";
 import jwt_decode from "jwt-decode";
 import fetchData from "../helper/apiCall";
-// Removed unused Link import
+import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar"; // ✅ Add this import
 
 // API base URL is set in apiCall.js
