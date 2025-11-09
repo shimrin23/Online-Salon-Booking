@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import Home from "../pages/Home";
 import Dashboard from "../pages/Dashboard";
@@ -8,7 +7,6 @@ import Loading from "./Loading";
 const SmartHome = () => {
   const [isAdmin, setIsAdmin] = useState(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const checkUserRole = () => {

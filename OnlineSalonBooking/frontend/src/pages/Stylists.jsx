@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import StylistCard from "../components/StylistCard";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import "../styles/stylists.css"; 
-import fetchData from "../helper/apiCall";
 import Loading from "../components/Loading";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../redux/reducers/rootSlice";
@@ -15,7 +14,7 @@ const Stylists = () => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.root);
 
-  const fetchAllStylists = async () => {
+  const fetchAllStylists = useCallback(async () => {
     dispatch(setLoading(true));
     try {
       console.log("Fetching stylists from:", "/api/stylist/getall");
@@ -43,11 +42,11 @@ const Stylists = () => {
     } finally {
       dispatch(setLoading(false));
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     fetchAllStylists();
-  }, []);
+  }, [fetchAllStylists]);
 
   return (
     <>

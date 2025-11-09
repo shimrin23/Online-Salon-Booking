@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/profile.css";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -14,8 +15,10 @@ import convertToBase64 from "../helper/convertImage";
 // API base URL is set in apiCall.js
 
 function Profile() {
-  const { userId } = jwt_decode(localStorage.getItem("token"));
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [userId, setUserId] = useState(null);
   const { loading } = useSelector((state) => state.root);
 
   const [file, setFile] = useState("");
@@ -31,8 +34,8 @@ function Profile() {
     confpassword: "",
   });
 
-  // Fetch user profile details on mount
-  const getUser = async () => {
+  // Fetch user profile details when userId is available
+  const getUser = useCallback(async () => {
     try {
       dispatch(setLoading(true));
       // ✅ Fixed: Use correct API endpoint
@@ -51,11 +54,29 @@ function Profile() {
       toast.error("Failed to load profile.");
       console.error(error);
     }
-  };
+  }, [dispatch, userId]);
 
   useEffect(() => {
-    getUser();
-  }, []);
+    // Decode token safely and set userId, or redirect to login
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+    try {
+      const decoded = jwt_decode(token);
+      setUserId(decoded.userId);
+    } catch (err) {
+      console.error("Invalid token:", err);
+      localStorage.removeItem("token");
+      navigate("/login");
+      return;
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    if (userId) getUser();
+  }, [userId, getUser]);
 
   // Handle file input change
   const onUpload = async (e) => {

@@ -1,0 +1,2 @@
+# Environment variables for Docker build
+REACT_APP_SERVER_DOMAIN=http://backend:5001

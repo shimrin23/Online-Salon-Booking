@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Empty from "../components/Empty";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
@@ -15,7 +16,8 @@ const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.root);
-  const { userId } = jwt_decode(localStorage.getItem("token"));
+  const navigate = useNavigate();
+  const [userId, setUserId] = useState(null);
 
   const getAllAppointments = async () => {
     try {
@@ -33,8 +35,26 @@ const Appointments = () => {
   };
 
   useEffect(() => {
-    getAllAppointments();
-  }, []);
+    // Decode token safely or redirect to login
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+    try {
+      const decoded = jwt_decode(token);
+      setUserId(decoded.userId);
+    } catch (err) {
+      console.error("Invalid token:", err);
+      localStorage.removeItem("token");
+      navigate("/login");
+      return;
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    if (userId) getAllAppointments();
+  }, [userId]);
 
   const markComplete = async (ele) => {
     try {

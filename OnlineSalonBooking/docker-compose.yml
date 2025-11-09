@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:6
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: smrn
+      MONGO_INITDB_ROOT_PASSWORD: 201114
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    build: ./backend
+    container_name: salon-backend
+    restart: always
+    env_file:
+      - ./backend/.env
+    ports:
+      - "5001:5001"
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./frontend
+    container_name: salon-frontend
+    restart: always
+    env_file:
+      - ./frontend/.env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:

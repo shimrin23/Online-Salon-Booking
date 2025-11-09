@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { setLoading } from "../redux/reducers/rootSlice";
-import { useDispatch, useSelector } from "react-redux";
-import Empty from "./Empty";
-import fetchData from "../helper/apiCall";
 import "../styles/user.css";
+import fetchData from "../helper/apiCall";
+import Empty from "./Empty";
 
 // API base URL is set in apiCall.js
 
 const AdminAppointments = () => {
   const [appointments, setAppointments] = useState([]);
-  const dispatch = useDispatch();
 
   const getAllAppointments = async () => {
     try {

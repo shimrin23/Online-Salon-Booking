@@ -3,13 +3,11 @@ import { NavLink, useNavigate } from "react-router-dom";
 import "../styles/register.css";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar"; // ✅ Add this import
 
 // API base URL is set in apiCall.js
 
 function Register() {
-  const [loading, setLoading] = useState(false);
   const [formDetails, setFormDetails] = useState({
     firstname: "",
     lastname: "",
@@ -49,9 +47,10 @@ function Register() {
     }
 
     try {
+      console.log('Attempting registration with baseURL:', axios.defaults.baseURL);
+      
       await toast.promise(
-        // ⚡ Edited this line: Added full backend URL
-        axios.post("/api/users/register", { 
+        axios.post('/api/users/register', {
           firstname,
           lastname,
           email,

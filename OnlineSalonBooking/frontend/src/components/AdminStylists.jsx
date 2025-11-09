@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import toast from "react-hot-toast";
-import { setLoading } from "../redux/reducers/rootSlice";
-import { useDispatch, useSelector } from "react-redux";
-import Empty from "./Empty";
 import fetchData from "../helper/apiCall";
+import toast from "react-hot-toast";
+import Empty from "./Empty";
 import "../styles/user.css";
 
 // API base URL is set in apiCall.js
 
 const AdminStylists = () => {
   const [stylists, setStylists] = useState([]);
-  const dispatch = useDispatch();
 
   const getAllStylists = async () => {
     try {

@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import toast from "react-hot-toast";
-import { setLoading } from "../redux/reducers/rootSlice";
-import { useDispatch, useSelector } from "react-redux";
-import Empty from "./Empty";
 import fetchData from "../helper/apiCall";
+import toast from "react-hot-toast";
+import Empty from "./Empty";
 
 // API base URL is set in apiCall.js
 
 const Users = () => {
   const [users, setUsers] = useState([]);
-  const dispatch = useDispatch();
 
   const getAllUsers = async () => {
     try {

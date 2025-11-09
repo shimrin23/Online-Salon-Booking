@@ -7,7 +7,6 @@ import { useDispatch } from "react-redux";
 import { setUserInfo } from "../redux/reducers/rootSlice";
 import jwt_decode from "jwt-decode";
 import fetchData from "../helper/apiCall";
-import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar"; // ✅ Add this import
 
 // API base URL is set in apiCall.js
@@ -29,53 +28,63 @@ function Login() {
   };
 
   const formSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const { email, password } = formDetails;
+  e.preventDefault();
+  try {
+    const { email, password } = formDetails;
 
-      if (!email || !password) {
-        return toast.error("Input field should not be empty");
-      }
-      if (password.length < 5) {
-        return toast.error("Password must be at least 5 characters long");
-      }
-
-      // ✅ Fixed: Use correct backend endpoint with /api prefix
-      const { data } = await toast.promise(
-        axios.post("/api/users/login", { email, password }),
-        {
-          pending: "Logging in...",
-          success: "Login successful",
-          error: "Unable to login user",
-          loading: "Logging user...",
-        }
-      );
-
-      localStorage.setItem("token", data.token);
-
-      // Decode token once
-      const decoded = jwt_decode(data.token);
-      const userId = decoded.userId;
-
-      // ✅ Fixed: Use correct backend endpoint with /api prefix
-      const userData = await fetchData(`/api/users/getuser/${userId}`);
-
-      // Dispatch full user info
-      dispatch(setUserInfo(userData));
-
-      // ✅ NEW: Redirect based on user role
-      if (userData.isAdmin) {
-        // Admin users go directly to dashboard
-        navigate("/dashboard");
-      } else {
-        // Regular users go to home page
-        navigate("/");
-      }
-    } catch (error) {
-      toast.error("Login failed. Please check your credentials.");
-      console.error("Login error:", error);
+    if (!email || !password) {
+      return toast.error("Input field should not be empty");
     }
-  };
+    if (password.length < 5) {
+      return toast.error("Password must be at least 5 characters long");
+    }
+
+    console.log('Attempting login with baseURL:', axios.defaults.baseURL);
+    // Use relative API path for dev proxy, baseURL will be set for Docker/prod
+    const response = await axios.post('/api/users/login', { email, password });
+    console.log('Login response:', response);
+    const data = response.data;
+
+    if (!data) {
+      console.error('No response data from server');
+      return toast.error("Login failed: No response from server");
+    }
+    
+    if (!data.token) {
+      console.error('Response missing token:', data);
+      return toast.error("Login failed: No token received from server");
+    }
+
+    // Save token and decode
+    localStorage.setItem("token", data.token);
+
+    let decoded;
+    try {
+      decoded = jwt_decode(data.token);
+    } catch (err) {
+      console.error("Invalid token:", err);
+      localStorage.removeItem("token");
+      return toast.error("Received invalid token from server");
+    }
+    toast.success("Login successful");
+
+    const userId = decoded.userId;
+    const userData = await fetchData(`/api/users/getuser/${userId}`);
+
+    dispatch(setUserInfo(userData));
+
+    if (userData.isAdmin) {
+      navigate("/dashboard");
+    } else {
+      navigate("/");
+    }
+
+  } catch (error) {
+    toast.error("Login failed. Please check your credentials.");
+    console.error("Login error:", error);
+  }
+};
+
 
   return (
     <>
@@ -116,4 +125,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Login; 

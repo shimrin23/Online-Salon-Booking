@@ -12,11 +12,17 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [token, setToken] = useState(localStorage.getItem("token") || "");
-  const [user, setUser] = useState(
-    localStorage.getItem("token")
-      ? jwt_decode(localStorage.getItem("token"))
-      : ""
-  );
+  const [user, setUser] = useState(() => {
+    const t = localStorage.getItem("token");
+    if (!t) return "";
+    try {
+      return jwt_decode(t);
+    } catch (err) {
+      console.error("Invalid token in Navbar init:", err);
+      localStorage.removeItem("token");
+      return "";
+    }
+  });
 
   const logoutFunc = () => {
     dispatch(setUserInfo({}));
